@@ -13,6 +13,18 @@ import org.dom4j.VisitorSupport;
 import org.dom4j.io.SAXReader;
 
 public class XmlReader {
+	private Document doc_;
+	
+	public XmlReader(String fileName) {
+		try {
+			doc_ = ReadConfFile(fileName);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static Document ReadConfFile(String fileName)
 			throws MalformedURLException, DocumentException {
 		SAXReader reader = new SAXReader();
@@ -27,12 +39,13 @@ public class XmlReader {
 	// Call root.accept(new MyVisitor());
 	public class MyVisitor extends VisitorSupport {
 		public void visit(Element element) {
-			System.out.println(element.getName());
+			System.out.print("["+element.getName());
+			System.out.println(":"+element.getText()+"]");
 		}
 
 		public void visit(Attribute attr) {
-			System.out.println(attr.getName());
-			System.out.println(attr.getValue());
+			System.out.print("["+attr.getName());
+			System.out.println(":"+attr.getValue()+"]");
 		}
 	}
 	
@@ -40,24 +53,27 @@ public class XmlReader {
 		root.accept(new MyVisitor());
 	}
 
-	public void bar(Document document) {
-		List list = document.selectNodes("/foo/bar");
-		Node node = document.selectSingleNode("/foo/bar/author");
-		String name = node.valueOf("xxx");
+	public void bar(Document document, String element) {
+		Node node = document.selectSingleNode(element);
+		System.out.println(node);
+		String name = node.valueOf("xxx");	
+	}
+	
+	public String GetTextByName(String name) {
+		if (doc_ == null) {
+			return "";
+		}
+		Node node = doc_.selectSingleNode(name);
+		if (node == null) {
+			return "";
+		}
+		return node.getText();
 	}
 	
 	public static void main(String[] args) {
 		String file = "/Users/liangjianqun/Documents/java/workspace/crawler/src/main/resources/kaixinwx.xml";
-		try {
-			XmlReader xml = new XmlReader();
-			Document doc = XmlReader.ReadConfFile(file);
-			Element root = doc.getRootElement();
-			xml.Iter(root);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (DocumentException e) {
-			e.printStackTrace();
-		}
-		
+		XmlReader xml = new XmlReader(file);
+		String node = xml.GetTextByName("//RuleConfigInfo/NovelCover/Pattern");
+		System.out.println(node);		
 	}
 }

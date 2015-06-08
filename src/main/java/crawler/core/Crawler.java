@@ -12,6 +12,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 
 import crawler.common.Api;
+import crawler.common.Utils;
 
 public class Crawler {
 	private HttpClient httpClient_;
@@ -42,7 +43,7 @@ public class Crawler {
 				System.out.println("failed to fetch, errno " + result);
 				return null;
 			}
-			return ReadFromStream(post.getResponseBodyAsStream(),
+			return Utils.ReadFromStream(post.getResponseBodyAsStream(),
 					Api.kMaxPageSize);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -68,7 +69,7 @@ public class Crawler {
 				return null;
 			}
 			// Cookie[] myCookies = httpClient_.getState().getCookies();
-			return ReadFromStream(getter.getResponseBodyAsStream(),
+			return Utils.ReadFromStream(getter.getResponseBodyAsStream(),
 					Api.kMaxPageSize);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -79,40 +80,7 @@ public class Crawler {
 		return null;
 	}
 
-	public static byte[] ReadFromStream(InputStream is, int maxSize) {
-		if (is == null) {
-			return null;
-		}
-
-		int bufferSize = (maxSize > 0 ? maxSize : Api.kMaxPageSize);
-		byte[] buf = new byte[bufferSize];
-		byte[] buf2 = new byte[4 * 1024];
-		boolean hasContent = false;
-		int len;
-		int totalLen = 0, cursor = 0;
-		try {
-			while ((len = is.read(buf2, 0, buf2.length)) >= 0) {
-				hasContent = true;
-				totalLen += len;
-				if (maxSize > 0 && totalLen >= maxSize) {
-					break;
-				} else if (totalLen > bufferSize) {
-					buf = new byte[bufferSize * 2];
-				}
-				System.arraycopy(buf2, 0, buf, cursor, len);
-				cursor += len;
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		if (!hasContent) {
-			return null;
-		}
-		byte[] results = new byte[totalLen];
-		System.arraycopy(buf, 0, results, 0, totalLen);
-		return results;
-	}
+	
 	
 	public static Properties DefaultProperties() {
 		Properties props = new Properties();
@@ -129,10 +97,16 @@ public class Crawler {
 	}
 
 	public static void main(String[] args) {
-		String url = "http://www.kaixinwx.com/reader/34692/14429750.html";
+		String url = "http://www.kaixinwx.com/book/35592.html";
 		
 		Crawler crawler = new Crawler();
 		byte[] result = crawler.FetchByGet(url, Crawler.DefaultProperties());
-		System.out.println(new String(result));
+		//System.out.println(new String(result));
+		try {
+			Utils.WriteFile(new String(result), "./article.html");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
