@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class DbUtils {
 	// http://miao19880124.iteye.com/blog/992576
@@ -15,7 +16,12 @@ public class DbUtils {
 	private static final String PWD = "534568"; // 密码
 
 	private static Connection connection_ = null;
-
+	private static String sql_article_prefix_ = "INSERTO t_article(articleno,articlename,pinyin,pinyinheadchar,initial,keywords,"+
+			"authorid,author,category,subcategory,intro,lastchapterno,lastchapter,chapters,size,"+
+			"fullflag,imgflag,agent,firstflag,permission,authorflag,postdate,lastupdate,"+
+			"dayvisit,weekvisit,monthvisit,allvisit,dayvote,weekvote,monthvote,allvote,deleteflag,"+
+			"publicflag,createusernoeger,createtime,modifyusernoeger,modifytime) VALUES ";
+	
 	static {
 		try {
 			// 加载驱动
@@ -50,7 +56,12 @@ public class DbUtils {
 			while (rs.next()) {
 				System.out.println("total:" + rs.getString("loginid"));
 			}
-
+			
+			String sql = sql_article_prefix_ + " VALUES (";//"INSERT INTO t_user(loginid, password,type,deleteflag,activedflag) VALUES ('xxx', 'xx', 30 ,false,true);";
+			sql += "";
+			
+			Statement p = con.createStatement();
+			p.execute(sql);
 			rs.close();
 			pstmt.close();
 			con.close();
