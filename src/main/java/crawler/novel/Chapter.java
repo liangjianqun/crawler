@@ -2,7 +2,7 @@ package crawler.novel;
 
 public class Chapter {
 /*
-chapterno serial NOT NULL,
+	chapterno serial NOT NULL,
     articleno int,
     articlename varchar(100),
     chaptertype smallint,
@@ -18,7 +18,7 @@ chapterno serial NOT NULL,
     modifytime timestamp without time zone,
     PRIMARY KEY (chapterno) 
  */
-	public static String SqlChapterPrefix = "INSERT INTO t_chapter (articlename,chaptertype,chaptername,"+
+	public static String SqlChapterPrefix = "INSERT INTO t_chapter (articleno,articlename,chaptertype,chaptername,"+
 			"size,isvip,postdate,publishtime,ispublish,lastchecktime,deleteflag,modifyuserno,modifytime) VALUES ";
 			
 	private int articleno = 1;
@@ -37,7 +37,7 @@ chapterno serial NOT NULL,
 	
 	public String Sql() {
 		String sql = SqlChapterPrefix + " (";
-		sql = sql + "'" + articlename + "',"  + chaptertype + ",";
+		sql = sql + articleno + ",'" + articlename + "',"  + chaptertype + ",";
 		sql = sql + "'" + chaptername + "',"  + size + ",";
 		sql = sql + String.valueOf(isvip) + ",'" + postdate + "','" + publishtime + "',";
 		sql = sql + String.valueOf(ispublish) + ",'" + lastchecktime + "',";
