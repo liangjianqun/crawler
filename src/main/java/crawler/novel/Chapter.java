@@ -18,10 +18,10 @@ chapterno serial NOT NULL,
     modifytime timestamp without time zone,
     PRIMARY KEY (chapterno) 
  */
-	public static String SqlChapterPrefix = "INSERT INTO t_chapter(articlename,chaptertype,chaptername,"+
-			"size,isvip,pstdate,publishtime,ispublish,lastchecktime,deleteflag,modifyuserno,modifytime) VALUES ";
+	public static String SqlChapterPrefix = "INSERT INTO t_chapter (articlename,chaptertype,chaptername,"+
+			"size,isvip,postdate,publishtime,ispublish,lastchecktime,deleteflag,modifyuserno,modifytime) VALUES ";
 			
-	private int articleno = 0;
+	private int articleno = 1;
 	private String articlename = "笑傲江湖";
 	private int chaptertype = 10;
 	private String chaptername = "第一章 西湖底下";
@@ -37,8 +37,11 @@ chapterno serial NOT NULL,
 	
 	public String Sql() {
 		String sql = SqlChapterPrefix + " (";
-		sql = sql + "'" + articlename + chaptertype;
-		sql  = sql + chaptername + size;
+		sql = sql + "'" + articlename + "',"  + chaptertype + ",";
+		sql = sql + "'" + chaptername + "',"  + size + ",";
+		sql = sql + String.valueOf(isvip) + ",'" + postdate + "','" + publishtime + "',";
+		sql = sql + String.valueOf(ispublish) + ",'" + lastchecktime + "',";
+		sql = sql + String.valueOf(deleteflag) + "," + modifyuserno + ",'" + modifytime + "');";
 		return sql;
 	} 
 	

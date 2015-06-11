@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import crawler.novel.Article;
+import crawler.novel.Chapter;
 
 public class DbUtils {
 	// http://miao19880124.iteye.com/blog/992576
@@ -59,7 +60,9 @@ public class DbUtils {
 			sql += "";
 			Article a = new Article();
 			Statement p = con.createStatement();
-			p.execute(a.Sql());
+			//p.execute(a.Sql());
+			Chapter c = new Chapter();
+			p.execute(c.Sql());
 			rs.close();
 			pstmt.close();
 			con.close();
