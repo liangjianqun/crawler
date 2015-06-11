@@ -3,7 +3,7 @@ package crawler.novel;
 public class Article {
 	public static final String kStringDelimiter = "''";
 	public static final String kCommaDelimiter = ",";
-	private static String SqlArticlePrefix = "INSERT INTO t_article(articlename,pinyin,pinyinheadchar,initial,keywords,"+
+	public static String SqlArticlePrefix = "INSERT INTO t_article(articlename,pinyin,pinyinheadchar,initial,keywords,"+
 			"authorid,author,category,subcategory,intro,lastchapterno,lastchapter,chapters,size,"+
 			"fullflag,imgflag,agent,firstflag,permission,authorflag,postdate,lastupdate,"+
 			"dayvisit,weekvisit,monthvisit,allvisit,dayvote,weekvote,monthvote,allvote,deleteflag,"+
