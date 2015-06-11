@@ -16,13 +16,13 @@ public class Article {
 	private String keywords = "金庸 令狐冲 独孤九剑";
 	private int authorid = 1;
 	private String author = "金庸";
-	private int category = 0;
+	private int category = 10;
 	private int subcategory = 10;
 	private String intro = "笑傲江湖!";
 	private int lastchapterno = 100;
 	private String lastchapter = "华山论剑";
 	private int chapters = 100;
-	private int size = 0;
+	private int size = 100;
 	private boolean fullflag = false;
 	private int imgflag = 1;
 	private String agent = "agent?";
