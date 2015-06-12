@@ -1,5 +1,8 @@
 package crawler.novel;
 
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
+import crawler.common.Pinyin;
+
 public class Article {
 	public static final String kStringDelimiter = "''";
 	public static final String kCommaDelimiter = ",";
@@ -82,6 +85,13 @@ public class Article {
 	}
 	public void setArticlename(String articlename) {
 		this.articlename = articlename;
+		String[] py = null;
+		try {
+			 = Pinyin.getFirstAndPinyin(this.articlename);
+		} catch (BadHanyuPinyinOutputFormatCombination e) {
+			e.printStackTrace();
+		}
+		if ()
 	}
 	public String getPinyin() {
 		return pinyin;
