@@ -21,7 +21,7 @@ public class Chapter {
 	public static String SqlChapterPrefix = "INSERT INTO t_chapter (articleno,articlename,chaptertype,chaptername,"+
 			"size,isvip,postdate,publishtime,ispublish,lastchecktime,deleteflag,modifyuserno,modifytime) VALUES ";
 			
-	private int articleno = 2;
+	private int articleno = 1;
 	private String articlename = "笑傲江湖";
 	private int chaptertype = 0;
 	private String chaptername = "第一章 西湖底下";
