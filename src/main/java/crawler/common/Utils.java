@@ -6,9 +6,21 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Utils {
-	public static void WriteFile(String content, String filename) throws IOException {
+	public static String TimeOfDay() {
+		return TimeOfDay("yyyy-MM-dd HH:mm:ss.SSS");
+	}
+
+	public static String TimeOfDay(String format) {
+		SimpleDateFormat date = new SimpleDateFormat(format);
+		return date.format(new Date());
+	}
+
+	public static void WriteFile(String content, String filename)
+			throws IOException {
 		FileWriter writer = null;
 		try {
 			writer = new FileWriter(filename);
@@ -19,7 +31,7 @@ public class Utils {
 			}
 		}
 	}
-	
+
 	public static byte[] ReadFromStream(InputStream is, int maxSize) {
 		if (is == null) {
 			return null;
@@ -36,9 +48,14 @@ public class Utils {
 				hasContent = true;
 				totalLen += len;
 				if (maxSize > 0 && totalLen >= maxSize) {
+					totalLen -= len;
+					System.arraycopy(buf2, 0, buf, cursor, maxSize - totalLen);
+					cursor += (maxSize - totalLen);
 					break;
 				} else if (totalLen > bufferSize) {
-					buf = new byte[bufferSize * 2];
+					byte[] buf3 = new byte[bufferSize * 2];
+					System.arraycopy(buf, 0, buf3, 0, buf.length);
+					buf = buf3;
 				}
 				System.arraycopy(buf2, 0, buf, cursor, len);
 				cursor += len;
@@ -54,13 +71,17 @@ public class Utils {
 		System.arraycopy(buf, 0, results, 0, totalLen);
 		return results;
 	}
-	
+
 	public static byte[] ReadFile(String fileName) throws IOException {
 		File file = new File(fileName);
-		InputStream is = new FileInputStream(file);  
+		InputStream is = new FileInputStream(file);
 		byte[] result = ReadFromStream(is, 0);
 		is.close();
 		return result;
 	}
 	
+	public static void main(String[] args) {
+		System.out.println(Utils.TimeOfDay());
+	}
+
 }

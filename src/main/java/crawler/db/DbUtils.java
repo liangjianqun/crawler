@@ -14,8 +14,8 @@ public class DbUtils {
 	// http://miao19880124.iteye.com/blog/992576
 	// private static final String URL =
 	// "jdbc:postgresql://127.0.0.1:8432/yidu"; // JDBC连接URL
-	//private static final String URL = "jdbc:postgresql://192.168.1.110:5432/yidu"; // JDBC连接URL
-	private static final String URL = "jdbc:postgresql://192.168.99.128:5432/yidu"; // JDBC连接URL
+	private static final String URL = "jdbc:postgresql://192.168.1.110:5432/yidu"; // JDBC连接URL
+	//private static final String URL = "jdbc:postgresql://192.168.99.128:5432/yidu"; // JDBC连接URL
 	private static final String USR = "postgres"; // 用户名
 	private static final String PWD = "534568"; // 密码
 
@@ -63,11 +63,15 @@ public class DbUtils {
 			//p.execute(a.Sql());
 			Chapter c = new Chapter();
 			for (int i = 1; i <= 1000; ++i) {
-				c.setChaptername("第" + i +"章 xxx");
-				p.execute(c.Sql());
+				a.setCategory(i % 10 + 1);
+				a.setArticlename("语文第" + i +"部");
+				p.execute(a.Sql());
+				//c.setChaptername("第" + i +"章 xxx");
+				//p.execute(c.Sql());
 			}
 			rs.close();
 			pstmt.close();
+			p.close();
 			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();

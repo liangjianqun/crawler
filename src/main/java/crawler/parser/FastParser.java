@@ -8,12 +8,42 @@ import org.htmlparser.NodeFilter;
 import org.htmlparser.Parser;
 import org.htmlparser.nodes.TagNode;
 import org.htmlparser.tags.Div;
+import org.htmlparser.tags.LinkTag;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
+import crawler.common.Pair;
 import crawler.core.Crawler;
 
 public class FastParser {
+	public static List<Pair<String, String>> ExtractLink(String input) {
+		List<Pair<String, String>> list = new ArrayList();
+	    try
+	    {
+			Parser parser = new Parser();
+			parser.setInputHTML(input);
+
+			NodeList nodeList = parser
+					.extractAllNodesThatMatch(new NodeFilter() {
+						public boolean accept(Node node) {
+							if (node instanceof LinkTag) {
+								return true;
+							}
+							return false;
+						}
+
+					});
+			for (int i = 0; i < nodeList.size(); i++) {
+				LinkTag n = (LinkTag) nodeList.elementAt(i);
+				Pair<String, String> pair = new Pair<String, String>(n.getStringText(), n.extractLink());
+				list.add(pair);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	    return list;
+	}
+	
 	public static <T extends TagNode> List<T> parseTags(String html,
 			final Class<T> tagType, final String attributeName,
 			final String attributeValue) {

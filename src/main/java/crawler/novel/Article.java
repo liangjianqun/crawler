@@ -1,7 +1,11 @@
 package crawler.novel;
 
+import java.util.List;
+
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
+import crawler.common.Pair;
 import crawler.common.Pinyin;
+import crawler.common.Utils;
 
 public class Article {
 	public static final String kStringDelimiter = "''";
@@ -17,7 +21,7 @@ public class Article {
 	private String pinyinheadchar = "xiao";
 	private String initial = "x";// 1Byte
 	private String keywords = "金庸 令狐冲 独孤九剑";
-	private int authorid = 1;
+	private int authorid = 0;
 	private String author = "金庸";
 	private int category = 10;
 	private int subcategory = 10;
@@ -28,12 +32,12 @@ public class Article {
 	private int size = 100;
 	private boolean fullflag = false;
 	private int imgflag = 1;
-	private String agent = "agent?";
+	private String agent = "";
 	private boolean firstflag = false;
 	private int permission = 0;
 	private boolean authorflag = false;
-	private String postdate = "2015-06-09 23:39:50.471";//timestamp
-	private String lastupdate = "2015-06-09 23:39:50.471";//timestamp
+	private String postdate = Utils.TimeOfDay();
+	private String lastupdate = Utils.TimeOfDay();
 	private int dayvisit = 0;
 	private int weekvisit = 0;
 	private int monthvisit = 0;
@@ -44,11 +48,31 @@ public class Article {
 	private int allvote = 0;
 	private boolean deleteflag = false;
 	private int publicflag = 0;
-	private int createuserno = 0;
-	private String createtime = "2015-06-09 23:39:50.471"; //timestamp without time zone
+	private int createuserno = 1;
+	private String createtime = Utils.TimeOfDay();
 	private int modifyuserno = 0;
-	private String modifytime = "2015-06-09 23:39:50.471"; //timestamp without time zone
+	private String modifytime = Utils.TimeOfDay();
 	
+	private String novelCover_ = "";
+	private List<Pair<String, String>> chapterList_;
+	
+	
+	public List<Pair<String, String>> getChapterList() {
+		return chapterList_;
+	}
+
+	public void setChapterList(List<Pair<String, String>> chapterList) {
+		this.chapterList_ = chapterList;
+	}
+
+	public String getNovelCover() {
+		return novelCover_;
+	}
+
+	public void setNovelCover(String novelCover) {
+		this.novelCover_ = novelCover;
+	}
+
 	public String Sql() {
 		String sql = SqlArticlePrefix + "(";
 		sql = sql + "'" + articlename + "',";
@@ -87,11 +111,15 @@ public class Article {
 		this.articlename = articlename;
 		String[] py = null;
 		try {
-			 = Pinyin.getFirstAndPinyin(this.articlename);
+			 py = Pinyin.getFirstAndPinyin(this.articlename);
 		} catch (BadHanyuPinyinOutputFormatCombination e) {
 			e.printStackTrace();
 		}
-		if ()
+		if (py != null && py.length == 2) {
+			setPinyin(py[1]);
+			setPinyinheadchar(py[0]);
+			setInitial(py[0].substring(0, 1));
+		}
 	}
 	public String getPinyin() {
 		return pinyin;

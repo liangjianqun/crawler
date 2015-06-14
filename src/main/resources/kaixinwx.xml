@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RuleConfigInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+ <GetSiteName>
+  <RegexName>GetSiteName</RegexName>
+  <Pattern>开心文学网</Pattern>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </GetSiteName>
+ <NovelSearch_GetNovelName>
+  <RegexName>NovelSearch_GetNovelName</RegexName>
+  <Pattern/>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </NovelSearch_GetNovelName>
+ <GetSiteCharset>
+  <RegexName>GetSiteCharset</RegexName>
+  <Pattern>UTF-8</Pattern>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </GetSiteCharset>
+ <NovelSearch_GetNovelKey>
+  <RegexName>NovelSearch_GetNovelKey</RegexName>
+  <Pattern/>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </NovelSearch_GetNovelKey>
+ <NovelDefaultCoverUrl>
+  <RegexName>NovelDefaultCoverUrl</RegexName>
+  <Pattern>http://www.kaixinwx.com/cover/49/49260/49260s.jpg</Pattern>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </NovelDefaultCoverUrl>
+ <NovelIntro>
+  <RegexName>NovelIntro</RegexName>
+  <Pattern>&lt;meta property="og:description" content="((.|\n)+?)"/&gt;</Pattern>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </NovelIntro>
+ <NovelName>
+  <RegexName>NovelName</RegexName>
+  <Pattern>&lt;meta property="og:title" content="(.+?)"/&gt;</Pattern>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </NovelName>
+ <PubChapter_GetChapterKey>
+  <RegexName>PubChapter_GetChapterKey</RegexName>
+  <Pattern>&lt;li&gt;&lt;a href="(.+?)" title=".+?"&gt;.+?&lt;/a&gt;&lt;/li&gt;</Pattern>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </PubChapter_GetChapterKey>
+ <PubIndexUrl>
+  <RegexName>PubIndexUrl</RegexName>
+  <Pattern>http://www.kaixinwx.com/book/{NovelKey}.html</Pattern>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </PubIndexUrl>
+ <SmallSort>
+  <RegexName>SmallSort</RegexName>
+  <Pattern>&lt;meta property="og:novel:category" content="(.+?)"/&gt;</Pattern>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </SmallSort>
+ <PubChapterName>
+  <RegexName>PubChapterName</RegexName>
+  <Pattern>&lt;li&gt;&lt;a href=".+?" title=".+?"&gt;(.+?)&lt;/a&gt;&lt;/li&gt;</Pattern>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </PubChapterName>
+ <NovelList_GetNovelKey>
+  <RegexName>NovelList_GetNovelKey</RegexName>
+  <Pattern>&lt;dd class="title"&gt;&lt;a href="/book/(\d*).html"&gt;.+?&lt;/a&gt;&lt;/dd&gt;</Pattern>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </NovelList_GetNovelKey>
+ <NovelSearchUrl>
+  <RegexName>NovelSearchUrl</RegexName>
+  <Pattern/>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </NovelSearchUrl>
+ <NovelDegree>
+  <RegexName>NovelDegree</RegexName>
+  <Pattern>&lt;meta property="og:novel:status" content="(.+?)"/&gt;</Pattern>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </NovelDegree>
+ <NovelUrl>
+  <RegexName>NovelUrl</RegexName>
+  <Pattern>http://www.kaixinwx.com/book/{NovelKey}.html</Pattern>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </NovelUrl>
+ <NovelKeyword>
+  <RegexName>NovelKeyword</RegexName>
+  <Pattern/>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </NovelKeyword>
+ <TestSearchNovelName>
+  <RegexName>TestSearchNovelName</RegexName>
+  <Pattern/>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </TestSearchNovelName>
+ <RuleVersion>
+  <RegexName>RuleVersion</RegexName>
+  <Pattern>1</Pattern>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </RuleVersion>
+ <NovelListUrl>
+  <RegexName>NovelListUrl</RegexName>
+  <Pattern>http://www.kaixinwx.com/top/lastupdate.html</Pattern>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </NovelListUrl>
+ <NovelInfoExtra>
+  <RegexName>NovelInfoExtra</RegexName>
+  <Pattern/>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </NovelInfoExtra>
+ <NovelInfo_GetNovelPubKey>
+  <RegexName>NovelInfo_GetNovelPubKey</RegexName>
+  <Pattern/>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </NovelInfo_GetNovelPubKey>
+ <NovelCover>
+  <RegexName>NovelCover</RegexName>
+  <Pattern>&lt;meta property="og:image" content="(.+?)"/&gt;</Pattern>
+  <Method/>
+  <FilterPattern/>
+  <Options>http://www.kaixinwx.com/</Options>
+ </NovelCover>
+ <GetSiteUrl>
+  <RegexName>GetSiteUrl</RegexName>
+  <Pattern>http://www.kaixinwx.com/</Pattern>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </GetSiteUrl>
+ <PubContentText>
+  <RegexName>PubContentText</RegexName>
+  <Pattern>&lt;div class="mainContenr"   id="content"&gt;((.|\n)+?)&lt;div id="reader_ad_02"&gt;</Pattern>
+  <Method/>
+  <FilterPattern>&lt;span style="color:red;font-size:14px"&gt;本站已开通小说订阅功能，您可以订阅自己喜欢的小说，订阅小说如有更新我们会件第一时间通过邮通知您！切记一定要设置好邮箱地址哦！ &lt;/span&gt; &lt;br&gt;
+&lt;div id="reader_ad_01" style="height:90px"&gt;&lt;/div&gt;
+&lt;script type="text/javascript"&gt;((.|\n)+?)&lt;/script&gt;
+&lt;script.+?&lt;/script&gt;|&lt;div.+?&gt;|&lt;/div&gt;|&lt;p&gt;|&lt;/p&gt;
+www.+?com
+www.+?cn
+www.+?net
+www.+?org
+…
+‘
+’
+&lt;font.+?&lt;/font&gt;
+&lt;a.+?&lt;/a&gt;
+レ.+?レ
+&lt;br /&gt;\s*&lt;br /&gt;♂&lt;br /&gt;
+—
+“
+…
+hides
+”
+‘
+’
+&lt;br&gt;
+ｗＷｗ．２３ｕＳ．ｃｏＭ
+２３Ｕｓ．ｃｏｍ
+ｗＷｗ．２３ｕＳ．ｃｏＭ
+&amp;nbsp;
+ </FilterPattern>
+  <Options/>
+ </PubContentText>
+ <PubContentUrl>
+  <RegexName>PubContentUrl</RegexName>
+  <Pattern>{ChapterKey}</Pattern>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </PubContentUrl>
+ <NovelAuthor>
+  <RegexName>NovelAuthor</RegexName>
+  <Pattern>&lt;meta property="og:novel:author" content="(.+?)"/&gt;</Pattern>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </NovelAuthor>
+ <LagerSort>
+  <RegexName>LagerSort</RegexName>
+  <Pattern>&lt;meta property="og:novel:category" content="(.+?)"/&gt;</Pattern>
+  <Method/>
+  <FilterPattern/>
+  <Options/>
+ </LagerSort>
+</RuleConfigInfo>

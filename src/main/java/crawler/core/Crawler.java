@@ -70,7 +70,7 @@ public class Crawler {
 			}
 			// Cookie[] myCookies = httpClient_.getState().getCookies();
 			return Utils.ReadFromStream(getter.getResponseBodyAsStream(),
-					Api.kMaxPageSize);
+					0);//Api.kMaxPageSize);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

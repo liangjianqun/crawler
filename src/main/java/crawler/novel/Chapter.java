@@ -1,5 +1,7 @@
 package crawler.novel;
 
+import crawler.common.Utils;
+
 public class Chapter {
 /*
 	chapterno serial NOT NULL,
@@ -27,13 +29,13 @@ public class Chapter {
 	private String chaptername = "第一章 西湖底下";
 	private int size = 100;
 	private boolean isvip = false;
-	private String postdate = "2015-06-09 23:39:50.471";
-	private String publishtime = "2015-06-09 23:39:50.471";
+	private String postdate = Utils.TimeOfDay();
+	private String publishtime = Utils.TimeOfDay();
 	private boolean ispublish = true;
-	private String lastchecktime = "2015-06-09 23:39:50.471";
+	private String lastchecktime = Utils.TimeOfDay();
 	private boolean deleteflag = false;
 	private int modifyuserno = 0;
-	private String modifytime = "2015-06-09 23:39:50.471";
+	private String modifytime = Utils.TimeOfDay();
 	
 	public String Sql() {
 		String sql = SqlChapterPrefix + " (";
