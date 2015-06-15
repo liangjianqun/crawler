@@ -7,4 +7,9 @@ public class Api {
 	
 	// Http error
 	public static int kHttp200 = 200;
+	
+	public static int kArticleHashNum = 1000;
+	public static String kDeployRoot = "/usr/local/tomcat/webapps/ROOT/";
+	public static String kDeployTxt = "txt/";
+	public static String kDeployCover = "cover/";
 }

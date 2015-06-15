@@ -87,7 +87,7 @@ public class Article {
 		sql = sql + weekvisit + "," +monthvisit + "," + allvisit + "," + dayvote + ",";
 		sql = sql + weekvote + "," + monthvote + "," + allvote + "," + String.valueOf(deleteflag) +",";
 		sql = sql + publicflag + "," + createuserno + ",'";
-		sql = sql + createtime + "'," + modifyuserno + ",'" + modifytime+"');";
+		sql = sql + createtime + "'," + modifyuserno + ",'" + modifytime+"')";
 				
 		return sql;
 	}

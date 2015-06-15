@@ -23,6 +23,8 @@ public class Chapter {
 	public static String SqlChapterPrefix = "INSERT INTO t_chapter (articleno,articlename,chaptertype,chaptername,"+
 			"size,isvip,postdate,publishtime,ispublish,lastchecktime,deleteflag,modifyuserno,modifytime) VALUES ";
 			
+
+	private int chapterno = 0;
 	private int articleno = 1;
 	private String articlename = "笑傲江湖";
 	private int chaptertype = 0;
@@ -43,7 +45,7 @@ public class Chapter {
 		sql = sql + "'" + chaptername + "',"  + size + ",";
 		sql = sql + String.valueOf(isvip) + ",'" + postdate + "','" + publishtime + "',";
 		sql = sql + String.valueOf(ispublish) + ",'" + lastchecktime + "',";
-		sql = sql + String.valueOf(deleteflag) + "," + modifyuserno + ",'" + modifytime + "');";
+		sql = sql + String.valueOf(deleteflag) + "," + modifyuserno + ",'" + modifytime + "')";
 		return sql;
 	} 
 
@@ -53,6 +55,14 @@ public class Chapter {
 
 	public static void setSqlChapterPrefix(String sqlChapterPrefix) {
 		SqlChapterPrefix = sqlChapterPrefix;
+	}
+	
+	public int getChapterno() {
+		return chapterno;
+	}
+
+	public void setChapterno(int chapterno) {
+		this.chapterno = chapterno;
 	}
 
 	public int getArticleno() {
