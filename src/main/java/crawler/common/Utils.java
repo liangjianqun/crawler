@@ -1,7 +1,9 @@
 package crawler.common;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,6 +19,19 @@ public class Utils {
 	public static String TimeOfDay(String format) {
 		SimpleDateFormat date = new SimpleDateFormat(format);
 		return date.format(new Date());
+	}
+	
+	public static void WriteFile(byte[] content, String filename)
+			throws IOException {
+		BufferedOutputStream out = null;
+		try {
+			out = new BufferedOutputStream(new FileOutputStream(filename));
+			out.write(content);
+		} finally {
+			if (out != null) {
+				out.close();
+			}
+		}
 	}
 
 	public static void WriteFile(String content, String filename)
@@ -78,6 +93,20 @@ public class Utils {
 		byte[] result = ReadFromStream(is, 0);
 		is.close();
 		return result;
+	}
+	
+	public static void Makedir(String path) {
+		File fd = null;
+		try {
+			fd = new File(path);
+			if (!fd.exists()) {
+				fd.mkdirs();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			fd = null;
+		}
 	}
 	
 	public static void main(String[] args) {

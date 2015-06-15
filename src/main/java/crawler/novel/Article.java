@@ -71,8 +71,9 @@ public class Article {
 
 	public void setNovelCover(String novelCover) {
 		this.novelCover_ = novelCover;
+		setImgflag(Imgflag(novelCover));
 	}
-
+	
 	public String Sql() {
 		String sql = SqlArticlePrefix + "(";
 		sql = sql + "'" + articlename + "',";
@@ -330,6 +331,36 @@ public class Article {
 	}
 	public void setModifytime(String modifytime) {
 		this.modifytime = modifytime;
+	}
+	
+	public static int Imgflag(String imgfile) {
+		if (imgfile.indexOf("nocover.jpg") >= 0) {
+			return 0;
+		} else if (imgfile.indexOf("l.jpg") >= 0) {
+			return 10;
+		} else if (imgfile.indexOf(".png") >= 0) {
+			return 3;
+		} else if (imgfile.indexOf(".gif") >= 0) {
+			return 2;
+		} else if (imgfile.indexOf(".jpg") >= 0) {
+			return 1;
+		}
+		return 0;
+	}
+	
+	public static String ImgSuffix(int imgflag) {
+        switch (imgflag) {
+        case 1:
+            return "s.jpg";
+        case 2:
+            return "s.gif";
+        case 3:
+            return "s.png";
+        case 10:
+            return "l.jpg";
+        default:
+            return "nocover.jpg";
+        }
 	}
 
 	public static void main(String[] args) {

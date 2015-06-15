@@ -25,7 +25,7 @@ public class Job {
 	private Chapter chapter_ = null;
 	private Crawler crawler_ = new Crawler();
 	
-	private String baseUrl_ = "http://www.kaixinwx.com/book/";
+	private String baseUrl_ = "http://www.kaixinwx.com";
 	
 	public Job(String articleUrl) {
 		articleUrl_ = articleUrl;
@@ -42,12 +42,26 @@ public class Job {
 		List<String> toReplace = new ArrayList<String>();
 		toReplace.add("开心");
 		article_ = ArticleParser.Parse(new String(html), toReplace);
+		
 		return 0;
 	}
 	
-	public static int SaveCoverToDisk(byte[] img, int articleNo, int chapterNo) {
+	public static int SaveCoverToDisk(byte[] img, int articleNo, int imgflag) {
+		int result = 0;
+		String file = Api.kDeployRoot + Api.kDeployCover;
+		file = file + (articleNo / Api.kArticleHashNum) + "/"; 
+		file = file + articleNo + "/";
+		Utils.Makedir(file);
+		file = file + articleNo + Article.ImgSuffix(imgflag);
 		
-		return 0;
+		try {
+			Utils.WriteFile(img, file);
+		} catch (IOException e) {
+			result = -1;
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 	
 	public int SaveArticleToDb() {
@@ -58,7 +72,9 @@ public class Job {
 			pstmt = con.createStatement();
 			if (pstmt.execute(article_.Sql() + " RETURNING articleno;")) {
 				ResultSet rs = pstmt.getResultSet();
-				article_.setArticleno(Integer.parseInt(rs.getString("articleno")));
+				if (rs.next()) {
+					article_.setArticleno(Integer.parseInt(rs.getString("articleno")));
+				}
 			}
 		} catch (SQLException e) {
 			result = -1;
@@ -122,7 +138,9 @@ public class Job {
 		int result = 0;
 		String file = Api.kDeployRoot + Api.kDeployTxt;
 		file = file + (articleNo / Api.kArticleHashNum) + "/"; 
-		file = file + articleNo + "/" + chapterNo + ".txt";
+		file = file + articleNo + "/";
+		Utils.Makedir(file);
+		file = file + chapterNo + ".txt";
 		
 		try {
 			Utils.WriteFile(txt, file);
@@ -142,7 +160,9 @@ public class Job {
 			pstmt = con.createStatement();
 			if (pstmt.execute(chapter.Sql() + " RETURNING chapterno;")) {
 				ResultSet rs = pstmt.getResultSet();
-				chapter.setChapterno(Integer.parseInt(rs.getString("chapterno")));
+				if (rs.next()) {
+					chapter.setChapterno(Integer.parseInt(rs.getString("chapterno")));
+				}
 			}
 		} catch (SQLException e) {
 			result = -1;
@@ -158,9 +178,40 @@ public class Job {
 		return result;
 	}
 	
+	public int ProcessArticle() {
+		int result = 0;
+		
+		if (ParseArticle() != 0) {
+			System.err.println("Failed to ParseArticle " + articleUrl_);
+			result = -1;
+			return result;
+		}
+		String url = "";
+		if (article_.getNovelCover().indexOf("http") < 0) {
+			url = baseUrl_;
+		}
+		url += article_.getNovelCover();
+		byte[] html = crawler_.FetchByGet(url, Crawler.DefaultProperties());
+		if (html == null) {
+			System.err.println("FATAL failed to fetch url " + url);
+			return -1;
+		}
+		if (SaveCoverToDisk(html, article_.getArticleno(), article_.getImgflag()) != 0) {
+			System.err.println("FATAL failed to SaveCoverToDisk url " + url);
+			return -1;
+		}
+		if (SaveArticleToDb() != 0) {
+			System.err.println("FATAL failed to SaveArticleToDb url " + url);
+			return -1;
+		}
+		
+		return result;
+	}
+	
 	public int Process() {
 		int result = 0;
-		if (ParseArticle() != 0 || SaveArticleToDb() != 0) {
+		
+		if (ProcessArticle() != 0) {
 			result = -1;
 		}
 		result = ProcessChapter();
