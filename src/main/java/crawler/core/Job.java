@@ -2,6 +2,7 @@ package crawler.core;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -46,13 +47,20 @@ public class Job {
 		return 0;
 	}
 	
-	public static int SaveCoverToDisk(byte[] img, int articleNo, int imgflag) {
-		int result = 0;
+	public static String CoverPath(int articleNo, int imgflag, boolean createDir) {
 		String file = Api.kDeployRoot + Api.kDeployCover;
 		file = file + (articleNo / Api.kArticleHashNum) + "/"; 
 		file = file + articleNo + "/";
-		Utils.Makedir(file);
+		if (createDir) {
+			Utils.Makedir(file);
+		}
 		file = file + articleNo + Article.ImgSuffix(imgflag);
+		return file;
+	}
+	
+	public static int SaveCoverToDisk(byte[] img, int articleNo, int imgflag) {
+		int result = 0;
+		String file = CoverPath(articleNo, imgflag, true);
 		
 		try {
 			Utils.WriteFile(img, file);
@@ -107,24 +115,55 @@ public class Job {
             System.out.println("Begin to ProcessChapter " + url);    
 			byte[] html = crawler_.FetchByGet(url, Crawler.DefaultProperties());
 			if (html == null) {
-				System.err.println("FATAL failed to fetch url " + url);
+				System.err.println("FATAL failed to fetch url " + url + " " + 
+								    ChapterPath(chapter_.getArticleno(), chapter_.getChapterno(), false));
 				continue;
 			}
 			String txt = ParseChapter(new String(html));
 			if (txt == null) {
-				System.err.println("FATAL failed to ParseChapter url " + url);
+				System.err.println("FATAL failed to ParseChapter url " + url + " " +
+									ChapterPath(chapter_.getArticleno(), chapter_.getChapterno(), false));
 				continue;
 			}
 			if (SaveChapterToDb(chapter_) != 0) {
-				System.err.println("FATAL failed to SaveChapterToDb url " + url);
+				System.err.println("FATAL failed to SaveChapterToDb url " + url + " " +
+									ChapterPath(chapter_.getArticleno(), chapter_.getChapterno(), false));
 				continue;
 			}
 			if (SaveChapterToDisk(txt, chapter_.getArticleno(), chapter_.getChapterno()) != 0) {
-				System.err.println("FATAL failed to SaveChapterToDisk url " + url);
+				System.err.println("FATAL failed to SaveChapterToDisk url " + url + " " +
+									ChapterPath(chapter_.getArticleno(), chapter_.getChapterno(), false));
 				continue;
+			}
+			if ((i % 100 == 0 || (i == list.size() - 1)) &&
+				UpdateLastChapter(chapter_.getChapterno(), article_.getArticlename()) != 0) {
+				System.err.println("FATAL failed to UpdateLastChapter " + article_.getArticlename());
 			}
 		}
 		return 0;
+	}
+	
+	private int UpdateLastChapter(int lastNo, String lastChapter) {
+		int result = 0;
+		Connection con = DbUtils.GetConnection();
+		Statement pstmt = null;
+		String sql = "UPDATE t_article SET lastchapterno = " + lastNo + 
+				",lastchapter = '" + lastChapter + "' WHERE articleno = " + article_.getArticleno();
+		try {
+			pstmt = con.createStatement();
+			pstmt.execute(sql);
+		} catch (SQLException e) {
+			result = -1;
+			e.printStackTrace();
+		}
+
+		try {
+			pstmt.close();
+		} catch (SQLException e) {
+			result = -1;
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 	public String ParseChapter(String html) {
@@ -135,13 +174,20 @@ public class Job {
 		return null;
 	}
 	
-	private int SaveChapterToDisk(String txt, int articleNo, int chapterNo) {
-		int result = 0;
+	public static String ChapterPath(int articleNo, int chapterNo, boolean createDir) {
 		String file = Api.kDeployRoot + Api.kDeployTxt;
 		file = file + (articleNo / Api.kArticleHashNum) + "/"; 
 		file = file + articleNo + "/";
-		Utils.Makedir(file);
+		if (createDir) {
+			Utils.Makedir(file);
+		}
 		file = file + chapterNo + ".txt";
+		return file;
+	}
+	
+	private int SaveChapterToDisk(String txt, int articleNo, int chapterNo) {
+		int result = 0;
+		String file = ChapterPath(articleNo, chapterNo, true);
 		
 		try {
 			Utils.WriteFile(txt, file);
@@ -179,14 +225,46 @@ public class Job {
 		return result;
 	}
 	
+	public static boolean AlreadyHasArticle(String name) {
+		Connection con = DbUtils.GetConnection();
+		String sql = "select * from t_article where articlename = '" + name+ "'";
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+				pstmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
+	
 	public int ProcessArticle() {
 		int result = 0;
-	
         System.out.println("Begin to ProcessArticle " + articleUrl_);    
 		if (ParseArticle() != 0) {
-			System.err.println("Failed to ParseArticle " + articleUrl_);
+			System.err.println("FATAL failed to ParseArticle " + articleUrl_);
 			result = -1;
 			return result;
+		}
+		if (AlreadyHasArticle(article_.getArticlename())) {
+			System.out.println("AlreadyHasArticle " + articleUrl_ + " " + article_.getArticlename());  
+			return -1;
+		}
+
+		if (SaveArticleToDb() != 0) {
+			System.err.println("FATAL failed to SaveArticleToDb url " + articleUrl_);
+			return -1;
 		}
 		String url = "";
 		if (article_.getNovelCover().indexOf("http") < 0) {
@@ -195,15 +273,13 @@ public class Job {
 		url += article_.getNovelCover();
 		byte[] html = crawler_.FetchByGet(url, Crawler.DefaultProperties());
 		if (html == null) {
-			System.err.println("FATAL failed to fetch url " + url);
-			return -1;
-		}
-		if (SaveArticleToDb() != 0) {
-			System.err.println("FATAL failed to SaveArticleToDb url " + url);
+			System.err.println("FATAL failed to fetch url " + url + " " +
+							    CoverPath(article_.getArticleno(), article_.getImgflag(), false));
 			return -1;
 		}
         if (SaveCoverToDisk(html, article_.getArticleno(), article_.getImgflag()) != 0) {
-            System.err.println("FATAL failed to SaveCoverToDisk url " + url);
+            System.err.println("FATAL failed to SaveCoverToDisk url " + url + " " + 
+            					   CoverPath(article_.getArticleno(), article_.getImgflag(), false));
             return -1;
         }
 
@@ -211,8 +287,6 @@ public class Job {
 	}
 	
 	public int Process() {
-		int result = 0;
-		
 		if (ProcessArticle() != 0) {
             return -1;
 		}
@@ -220,7 +294,7 @@ public class Job {
 	}
 	
 	public static void main(String[] args) {
-		for (int i = 1; i <= 10; ++i) {
+		for (int i = 1; i <= 3; ++i) {
 			Job job = new Job("http://www.kaixinwx.com/book/" + i +".html");
 			System.out.println(job.Process());
 		}

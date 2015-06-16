@@ -15,6 +15,7 @@ public class Article {
 			"fullflag,imgflag,agent,firstflag,permission,authorflag,postdate,lastupdate,"+
 			"dayvisit,weekvisit,monthvisit,allvisit,dayvote,weekvote,monthvote,allvote,deleteflag,"+
 			"publicflag,createuserno,createtime,modifyuserno,modifytime) VALUES ";
+
 	private int articleno = 1;
 	private String articlename = "笑傲江湖";
 	private String pinyin = "xiaoaojianhu";
