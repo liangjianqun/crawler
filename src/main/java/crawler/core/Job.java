@@ -294,7 +294,15 @@ public class Job {
 	}
 	
 	public static void main(String[] args) {
-		for (int i = 1; i <= 100; ++i) {
+		int start = 1;
+		int stop = 50000;
+		if (args.length >= 1) {
+			start = Integer.parseInt(args[0]);
+		} 
+		if (args.length >= 2) {
+			stop = Integer.parseInt(args[1]);
+		}
+		for (int i = start; i <= stop; ++i) {
 			Job job = new Job("http://www.kaixinwx.com/book/" + i +".html");
 			System.out.println(job.Process());
 		}
