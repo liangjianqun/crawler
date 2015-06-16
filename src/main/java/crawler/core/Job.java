@@ -136,7 +136,7 @@ public class Job {
 				continue;
 			}
 			if ((i % 100 == 0 || (i == list.size() - 1)) &&
-				UpdateLastChapter(chapter_.getChapterno(), article_.getArticlename()) != 0) {
+				UpdateLastChapter(chapter_.getChapterno(), list.get(i).first()) != 0) {
 				System.err.println("FATAL failed to UpdateLastChapter " + article_.getArticlename());
 			}
 		}
