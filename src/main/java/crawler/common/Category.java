@@ -17,7 +17,7 @@ public class Category {
 	public static int kDefaultBigCategory = 10;
 	public static int kSmalltBigCategory = 35;
 	
-	private static Category category_ = new Category("src/main/resources/category.ini");
+	private static Category category_ = new Category("./category.ini");
 	
 	public static Category Instance() {
 		return category_;

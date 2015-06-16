@@ -104,6 +104,7 @@ public class Job {
 			}
 			url += list.get(i).second();
 			
+            System.out.println("Begin to ProcessChapter " + url);    
 			byte[] html = crawler_.FetchByGet(url, Crawler.DefaultProperties());
 			if (html == null) {
 				System.err.println("FATAL failed to fetch url " + url);
@@ -114,12 +115,12 @@ public class Job {
 				System.err.println("FATAL failed to ParseChapter url " + url);
 				continue;
 			}
-			if (SaveChapterToDisk(txt, chapter_.getArticleno(), chapter_.getChapterno()) != 0) {
-				System.err.println("FATAL failed to SaveChapterToDisk url " + url);
-				continue;
-			}
 			if (SaveChapterToDb(chapter_) != 0) {
 				System.err.println("FATAL failed to SaveChapterToDb url " + url);
+				continue;
+			}
+			if (SaveChapterToDisk(txt, chapter_.getArticleno(), chapter_.getChapterno()) != 0) {
+				System.err.println("FATAL failed to SaveChapterToDisk url " + url);
 				continue;
 			}
 		}
@@ -180,7 +181,8 @@ public class Job {
 	
 	public int ProcessArticle() {
 		int result = 0;
-		
+	
+        System.out.println("Begin to ProcessArticle " + articleUrl_);    
 		if (ParseArticle() != 0) {
 			System.err.println("Failed to ParseArticle " + articleUrl_);
 			result = -1;
@@ -196,15 +198,15 @@ public class Job {
 			System.err.println("FATAL failed to fetch url " + url);
 			return -1;
 		}
-		if (SaveCoverToDisk(html, article_.getArticleno(), article_.getImgflag()) != 0) {
-			System.err.println("FATAL failed to SaveCoverToDisk url " + url);
-			return -1;
-		}
 		if (SaveArticleToDb() != 0) {
 			System.err.println("FATAL failed to SaveArticleToDb url " + url);
 			return -1;
 		}
-		
+        if (SaveCoverToDisk(html, article_.getArticleno(), article_.getImgflag()) != 0) {
+            System.err.println("FATAL failed to SaveCoverToDisk url " + url);
+            return -1;
+        }
+
 		return result;
 	}
 	
@@ -212,11 +214,9 @@ public class Job {
 		int result = 0;
 		
 		if (ProcessArticle() != 0) {
-			result = -1;
+            return -1;
 		}
-		result = ProcessChapter();
-		
-		return result;
+		return ProcessChapter();
 	}
 	
 	public static void main(String[] args) {

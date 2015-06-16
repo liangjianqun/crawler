@@ -21,7 +21,7 @@ public class ArticleParser {
 	public static String kReplaceMent = "极品书";
 
 	static {
-		String xmlfile = "/Users/liangjianqun/Documents/java/workspace/crawler/src/main/resources/kaixinwx.xml";
+		String xmlfile = "./kaixinwx.xml";
 		XmlReader xml_ = new XmlReader(xmlfile);
 	};
 	
