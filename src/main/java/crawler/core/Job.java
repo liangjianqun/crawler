@@ -294,7 +294,7 @@ public class Job {
 	}
 	
 	public static void main(String[] args) {
-		for (int i = 1; i <= 3; ++i) {
+		for (int i = 1; i <= 100; ++i) {
 			Job job = new Job("http://www.kaixinwx.com/book/" + i +".html");
 			System.out.println(job.Process());
 		}
