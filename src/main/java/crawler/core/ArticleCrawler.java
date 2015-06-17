@@ -7,6 +7,7 @@ import java.util.List;
 import org.htmlparser.tags.Div;
 import org.htmlparser.tags.LinkTag;
 
+import crawler.common.Api;
 import crawler.common.Pair;
 import crawler.common.Utils;
 import crawler.novel.Article;
@@ -44,7 +45,7 @@ public class ArticleCrawler {
 	public static int GetAnArticle(String url, String file) {
 		int ret = 0;
 		Crawler crawler = new Crawler();
-		byte[] result = crawler.FetchByGet(url, Crawler.DefaultProperties());
+		byte[] result = crawler.FetchByGet(url, Crawler.DefaultProperties(), Api.kFetchRetry);
 		if (result == null) {
 			return -1;
 		}

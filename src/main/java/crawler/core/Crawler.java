@@ -53,7 +53,7 @@ public class Crawler {
 		return results;
 	}
 
-	public byte[] FetchByGet(String url, Properties headProps) {
+	public byte[] FetchByGet(String url, Properties headProps, int retry) {
 		GetMethod getter = new GetMethod(url);
 		if (headProps != null) {
 			for (Map.Entry<Object, Object> entry : headProps.entrySet()) {
@@ -62,22 +62,28 @@ public class Crawler {
 			}
 		}
 
+		byte[] result = null;
 		try {
-			int errno = httpClient_.executeMethod(getter);
-			if (errno != Api.kHttp200) {
-				System.out.println("failed to fetch, errno " + errno);
-				return null;
+			for (; retry > 0; --retry) {
+				int errno = httpClient_.executeMethod(getter);
+				if (errno != Api.kHttp200) {
+					System.out.println("failed to fetch, errno " + errno);
+					continue;
+				}
+				// Cookie[] myCookies = httpClient_.getState().getCookies();
+				result = Utils.ReadFromStream(getter.getResponseBodyAsStream(),
+						0);// Api.kMaxPageSize);
+				if (result != null) {
+					break;
+				}
 			}
-			// Cookie[] myCookies = httpClient_.getState().getCookies();
-			return Utils.ReadFromStream(getter.getResponseBodyAsStream(),
-					0);//Api.kMaxPageSize);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			getter.releaseConnection();
 		}
 
-		return null;
+		return result;
 	}
 
 	
@@ -100,7 +106,7 @@ public class Crawler {
 		String url = "http://www.kaixinwx.com/book/35592.html";
 		
 		Crawler crawler = new Crawler();
-		byte[] result = crawler.FetchByGet(url, Crawler.DefaultProperties());
+		byte[] result = crawler.FetchByGet(url, Crawler.DefaultProperties(), 1);
 		//System.out.println(new String(result));
 		try {
 			Utils.WriteFile(new String(result), "./article.html");

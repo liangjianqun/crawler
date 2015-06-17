@@ -12,6 +12,7 @@ import org.htmlparser.tags.LinkTag;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
+import crawler.common.Api;
 import crawler.common.Pair;
 import crawler.core.Crawler;
 
@@ -101,7 +102,7 @@ public class FastParser {
 		String url = "http://www.kaixinwx.com/reader/34692/14429750.html";
 		
 		Crawler crawler = new Crawler();
-		byte[] result = crawler.FetchByGet(url, Crawler.DefaultProperties());
+		byte[] result = crawler.FetchByGet(url, Crawler.DefaultProperties(), Api.kFetchRetry);
 		
         List<Div> authors=FastParser.parseTags(new String(result), Div.class, "class", "mainContenr"); 
 		for (Div div : authors) {

@@ -35,7 +35,7 @@ public class Job {
 	public int ParseArticle() {
 		System.out.println("Try to fetch " + articleUrl_);
 		Crawler crawler = new Crawler();
-		byte[] html = crawler.FetchByGet(articleUrl_, Crawler.DefaultProperties());
+		byte[] html = crawler.FetchByGet(articleUrl_, Crawler.DefaultProperties(), Api.kFetchRetry);
   
 		if (html == null) {
 			return -1;
@@ -113,7 +113,7 @@ public class Job {
 			url += list.get(i).second();
 			
             System.out.println("Begin to ProcessChapter " + url);    
-			byte[] html = crawler_.FetchByGet(url, Crawler.DefaultProperties());
+			byte[] html = crawler_.FetchByGet(url, Crawler.DefaultProperties(), Api.kFetchRetry);
 			if (html == null) {
 				System.err.println("FATAL failed to fetch url " + url + " " + 
 								    ChapterPath(chapter_.getArticleno(), chapter_.getChapterno(), false));
@@ -271,7 +271,7 @@ public class Job {
 			url = baseUrl_;
 		}
 		url += article_.getNovelCover();
-		byte[] html = crawler_.FetchByGet(url, Crawler.DefaultProperties());
+		byte[] html = crawler_.FetchByGet(url, Crawler.DefaultProperties(), Api.kFetchRetry);
 		if (html == null) {
 			System.err.println("FATAL failed to fetch url " + url + " " +
 							    CoverPath(article_.getArticleno(), article_.getImgflag(), false));
