@@ -28,6 +28,8 @@ public class Category {
 		try {
 			Parse();
 		} catch (IOException e) {
+			System.err.println("Failed to Load " + categoryFile_);
+			assert false;
 			e.printStackTrace();
 		}
 	}
