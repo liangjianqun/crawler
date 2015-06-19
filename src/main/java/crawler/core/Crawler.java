@@ -40,7 +40,7 @@ public class Crawler {
 		try {
 			int result = httpClient_.executeMethod(post);
 			if (result != Api.kHttp200) {
-				System.out.println("failed to fetch, errno " + result);
+				System.out.println("failed to fetch " + url + ", errno " + result);
 				return null;
 			}
 			return Utils.ReadFromStream(post.getResponseBodyAsStream(),
