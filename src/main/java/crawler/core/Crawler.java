@@ -49,6 +49,7 @@ public class Crawler {
 					Api.kMaxPageSize);
 		} catch (Exception e) {
 			Init();
+			System.err.println("Failed to Fetch " + url);
 			e.printStackTrace();
 		} finally {
 			post.releaseConnection();
@@ -64,6 +65,7 @@ public class Crawler {
 			if (result != null) {
 				break;
 			}
+			System.err.println("Failed to fetch " + url +" retry:" + retry);
 		}
 		return result;
 	}
@@ -87,6 +89,7 @@ public class Crawler {
 				}
 		} catch (Exception e) {
 			Init();
+			System.err.println("Failed to Fetch " + url);
 			e.printStackTrace();
 		} finally {
 			getter.releaseConnection();
