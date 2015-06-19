@@ -2,9 +2,11 @@ package crawler.core;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.SocketTimeoutException;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.httpclient.ConnectTimeoutException;
 import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
@@ -46,14 +48,27 @@ public class Crawler {
 			return Utils.ReadFromStream(post.getResponseBodyAsStream(),
 					Api.kMaxPageSize);
 		} catch (Exception e) {
+			Init();
 			e.printStackTrace();
 		} finally {
 			post.releaseConnection();
 		}
 		return results;
 	}
-
+	
 	public byte[] FetchByGet(String url, Properties headProps, int retry) {
+		byte[]  result = null;
+		
+		for (; retry > 0; --retry) {
+			result = FetchByGet(url, headProps);
+			if (result != null) {
+				break;
+			}
+		}
+		return result;
+	}
+
+	public byte[] FetchByGet(String url, Properties headProps) {
 		GetMethod getter = new GetMethod(url);
 		if (headProps != null) {
 			for (Map.Entry<Object, Object> entry : headProps.entrySet()) {
@@ -64,20 +79,14 @@ public class Crawler {
 
 		byte[] result = null;
 		try {
-			for (; retry > 0; --retry) {
 				int errno = httpClient_.executeMethod(getter);
 				if (errno != Api.kHttp200) {
 					System.out.println("failed to fetch, errno " + errno);
-					continue;
+				} else {
+					result = Utils.ReadFromStream(getter.getResponseBodyAsStream(), 0);
 				}
-				// Cookie[] myCookies = httpClient_.getState().getCookies();
-				result = Utils.ReadFromStream(getter.getResponseBodyAsStream(),
-						0);// Api.kMaxPageSize);
-				if (result != null) {
-					break;
-				}
-			}
 		} catch (Exception e) {
+			Init();
 			e.printStackTrace();
 		} finally {
 			getter.releaseConnection();
@@ -86,8 +95,6 @@ public class Crawler {
 		return result;
 	}
 
-	
-	
 	public static Properties DefaultProperties() {
 		Properties props = new Properties();
         props.put("User-Agent",
@@ -100,6 +107,8 @@ public class Crawler {
 
 	private void Init() {
 		httpClient_ = new HttpClient();
+		httpClient_.getHttpConnectionManager().getParams().setConnectionTimeout(Api.kConnectionTimeout);
+		httpClient_.getHttpConnectionManager().getParams().setSoTimeout(Api.kFetchTimeout);
 	}
 
 	public static void main(String[] args) {
