@@ -29,7 +29,7 @@ public class Chapter {
 	private String articlename = "笑傲江湖";
 	private int chaptertype = 0;
 	private String chaptername = "第一章 西湖底下";
-	private int size = 100;
+	private int size = 0;
 	private boolean isvip = false;
 	private String postdate = Utils.TimeOfDay();
 	private String publishtime = Utils.TimeOfDay();

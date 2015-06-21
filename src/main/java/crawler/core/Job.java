@@ -25,6 +25,8 @@ public class Job {
 	private Article article_ = null;
 	private Chapter chapter_ = null;
 	private Crawler crawler_ = new Crawler();
+	private int lastArticleNo_ = 0;
+	private int lastChapterNo_ = 0;
 	
 	private String baseUrl_ = "http://www.kaixinwx.com";
 	
@@ -81,7 +83,8 @@ public class Job {
 			if (pstmt.execute(article_.Sql() + " RETURNING articleno;")) {
 				ResultSet rs = pstmt.getResultSet();
 				if (rs.next()) {
-					article_.setArticleno(Integer.parseInt(rs.getString("articleno")));
+					lastArticleNo_ = Integer.parseInt(rs.getString("articleno"));
+					article_.setArticleno(lastArticleNo_);
 				}
 			}
 		} catch (SQLException e) {
@@ -112,7 +115,7 @@ public class Job {
 			}
 			url += list.get(i).second();
 			
-            System.out.println("Begin to ProcessChapter " + url);    
+            System.out.println("LastChapterNo " + lastChapterNo_ + "Begin to ProcessChapter " + url);    
 			byte[] html = crawler_.FetchByGet(url, Crawler.DefaultProperties(), Api.kFetchRetry);
 			if (html == null) {
 				System.err.println("FATAL failed to fetch url " + url + " " + 
@@ -125,6 +128,8 @@ public class Job {
 									ChapterPath(chapter_.getArticleno(), chapter_.getChapterno(), false));
 				continue;
 			}
+			chapter_.setSize(txt.length());
+			article_.setSize(article_.getSize() + txt.length());
 			if (SaveChapterToDb(chapter_) != 0) {
 				System.err.println("FATAL failed to SaveChapterToDb url " + url + " " +
 									ChapterPath(chapter_.getArticleno(), chapter_.getChapterno(), false));
@@ -140,6 +145,7 @@ public class Job {
 				System.err.println("FATAL failed to UpdateLastChapter " + article_.getArticlename());
 			}
 		}
+
 		return 0;
 	}
 	
@@ -148,7 +154,8 @@ public class Job {
 		Connection con = DbUtils.GetConnection();
 		Statement pstmt = null;
 		String sql = "UPDATE t_article SET lastchapterno = " + lastNo + 
-				",lastchapter = '" + lastChapter + "' WHERE articleno = " + article_.getArticleno();
+				",lastchapter = '" + lastChapter + "'" + ", size = " + article_.getSize() +
+				" WHERE articleno = " + article_.getArticleno();
 		try {
 			pstmt = con.createStatement();
 			pstmt.execute(sql);
@@ -208,7 +215,8 @@ public class Job {
 			if (pstmt.execute(chapter.Sql() + " RETURNING chapterno;")) {
 				ResultSet rs = pstmt.getResultSet();
 				if (rs.next()) {
-					chapter.setChapterno(Integer.parseInt(rs.getString("chapterno")));
+					lastChapterNo_ = Integer.parseInt(rs.getString("chapterno"));
+					chapter.setChapterno(lastChapterNo_);
 				}
 			}
 		} catch (SQLException e) {
@@ -251,7 +259,7 @@ public class Job {
 	
 	public int ProcessArticle() {
 		int result = 0;
-        System.out.println("Begin to ProcessArticle " + articleUrl_);    
+        System.out.println("LastArticleNo " + lastArticleNo_ +" Begin to ProcessArticle " + articleUrl_);    
 		if (ParseArticle() != 0) {
 			System.err.println("FATAL failed to ParseArticle " + articleUrl_);
 			result = -1;

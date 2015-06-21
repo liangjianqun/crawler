@@ -30,7 +30,7 @@ public class Article {
 	private int lastchapterno = 100;
 	private String lastchapter = "华山论剑";
 	private int chapters = 100;
-	private int size = 100;
+	private int size = 0;
 	private boolean fullflag = false;
 	private int imgflag = 1;
 	private String agent = "";

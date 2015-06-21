@@ -48,11 +48,13 @@ public class Crawler {
 			return Utils.ReadFromStream(post.getResponseBodyAsStream(),
 					Api.kMaxPageSize);
 		} catch (Exception e) {
-			Init();
 			System.err.println("Failed to Fetch " + url);
 			e.printStackTrace();
 		} finally {
 			post.releaseConnection();
+		}
+		if (results == null) {
+			Init();
 		}
 		return results;
 	}
@@ -83,16 +85,18 @@ public class Crawler {
 		try {
 				int errno = httpClient_.executeMethod(getter);
 				if (errno != Api.kHttp200) {
-					System.out.println("failed to fetch, errno " + errno);
+					System.out.println("Failed to fetch " + url + " , errno " + errno);
 				} else {
 					result = Utils.ReadFromStream(getter.getResponseBodyAsStream(), 0);
 				}
 		} catch (Exception e) {
-			Init();
 			System.err.println("Failed to Fetch " + url);
 			e.printStackTrace();
 		} finally {
 			getter.releaseConnection();
+		}
+		if (result == null) {
+			Init();
 		}
 
 		return result;
