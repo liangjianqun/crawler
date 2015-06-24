@@ -27,7 +27,8 @@ public class Job {
 	private Crawler crawler_ = new Crawler();
 	public static int lastArticleNo_ = 0;
 	private int lastChapterNo_ = 0;
-	
+	private boolean dropArticle_ = false;
+	private boolean dropChapter_ = false;
 	private String baseUrl_ = "http://www.kaixinwx.com";
 	
 	public Job(String articleUrl) {
@@ -115,7 +116,7 @@ public class Job {
 			}
 			url += list.get(i).second();
 			
-            System.out.println("LastChapterNo " + lastChapterNo_ + "Begin to ProcessChapter " + url);    
+            System.out.println("LastChapterNo " + lastChapterNo_ + " Begin to ProcessChapter " + url);    
 			byte[] html = crawler_.FetchByGet(url, Crawler.DefaultProperties(), Api.kFetchRetry);
 			if (html == null) {
 				System.err.println("FATAL failed to fetch url " + url + " " + 
@@ -283,19 +284,47 @@ public class Job {
 		if (html == null) {
 			System.err.println("FATAL failed to fetch url " + url + " " +
 							    CoverPath(article_.getArticleno(), article_.getImgflag(), false));
+			dropArticle_ = true;
 			return -1;
 		}
         if (SaveCoverToDisk(html, article_.getArticleno(), article_.getImgflag()) != 0) {
             System.err.println("FATAL failed to SaveCoverToDisk url " + url + " " + 
             					   CoverPath(article_.getArticleno(), article_.getImgflag(), false));
+            dropArticle_ = true;
             return -1;
         }
 
 		return result;
 	}
 	
+	private int DropArticle() {
+		int result = 0;
+		Connection con = DbUtils.GetConnection();
+		Statement pstmt = null;
+		String sql = "delete from t_article where articleno = " + article_.getArticleno();
+		System.err.println("Begin to Drop article " + sql);
+		try {
+			pstmt = con.createStatement();
+			pstmt.execute(sql); 
+		} catch (SQLException e) {
+			result = -1;
+			e.printStackTrace();
+		}
+
+		try {
+			pstmt.close();
+		} catch (SQLException e) {
+			result = -1;
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	public int Process() {
 		if (ProcessArticle() != 0) {
+			if (dropArticle_) {
+				DropArticle();
+			}
             return -1;
 		}
 		return ProcessChapter();
