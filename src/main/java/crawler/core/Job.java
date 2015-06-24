@@ -25,7 +25,7 @@ public class Job {
 	private Article article_ = null;
 	private Chapter chapter_ = null;
 	private Crawler crawler_ = new Crawler();
-	private int lastArticleNo_ = 0;
+	public static int lastArticleNo_ = 0;
 	private int lastChapterNo_ = 0;
 	
 	private String baseUrl_ = "http://www.kaixinwx.com";
