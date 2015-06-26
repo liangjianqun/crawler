@@ -5,10 +5,16 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Text;
 
 public class XmlWriter {
 	private DocumentBuilder builder_ = null;
 	private Document doc_ = null;
+	
+	public Document Doc() {
+		return doc_;
+	}
 	
 	public XmlWriter() {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance(); 
@@ -20,28 +26,33 @@ public class XmlWriter {
 		doc_ = builder_.newDocument();
 	}
 
-
-	Element root = doc.createElement("学生花名册"); 
-	//根元素添加上文档 
-	doc.appendChild(root); 
-	//建立"学生"元素，添加到根元素 
-	Element student = doc.createElement("学生"); 
-	student.setAttribute("性别", studentBean.getSex()); 
-	root.appendChild(student); 
-	//建立"姓名"元素，添加到学生下面，下同 
-	Element name = doc.createElement("姓名"); 
-	student.appendChild(name); 
-	Text tName = doc.createTextNode(studentBean.getName()); 
-	name.appendChild(tName);
-	Element age = doc.createElement("年龄"); 
-	student.appendChild(age); 
-	Text tAge = doc.createTextNode(String.valueOf(studentBean.getAge())); 
-	age.appendChild(tAge);
+	public Element CreateRoot(String root) {
+		Element e = doc_.createElement(root);
+		doc_.appendChild(e);
+		return e;
+	}
 	
+	public Element CreateElement(Element father, String elementName, String attributeName, String attributeValue) {
+		Element e = doc_.createElement(elementName);
+		e.setAttribute(attributeName, attributeValue);
+		father.appendChild(e);
+		return e;
+	}
 	
+	public Text CreateTextNode(Element father, String nodeName) {
+		Text text = doc_.createTextNode(nodeName);
+		father.appendChild(text);
+		return text;
+	}	
 	
 	public static void main(String[] args) {
-
+		XmlWriter xml = new XmlWriter();
+		Element father = xml.CreateRoot("root");
+		father = xml.CreateElement(father, "xx1", "aname1", "avalue1");
+		father = xml.CreateElement(father, "xx2", "aname2", "avalue2");
+		Text text = xml.CreateTextNode(father, "textnode");
+		Document doc = xml.Doc();
+		//System.out.println("" + doc.);
 	}
 }
 

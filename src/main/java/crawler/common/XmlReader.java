@@ -15,6 +15,10 @@ import org.dom4j.io.SAXReader;
 public class XmlReader {
 	private Document doc_;
 	
+	public XmlReader(Document doc) {
+		doc_ = doc;
+	}
+	
 	public XmlReader(String fileName) {
 		try {
 			doc_ = ReadConfFile(fileName);
