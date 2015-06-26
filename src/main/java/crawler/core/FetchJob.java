@@ -90,7 +90,7 @@ public class FetchJob {
 				continue;
 			}
 			try {
-				Utils.WriteFile(html, fileName);
+				Utils.WriteFile(txt, fileName);
 			} catch (IOException e) {
 				e.printStackTrace();
 				System.err.println("FATAL failed to Save url " + url + " " + fileName);
