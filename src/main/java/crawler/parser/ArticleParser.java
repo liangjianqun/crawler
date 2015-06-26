@@ -33,6 +33,39 @@ public class ArticleParser {
 		return str;
 	}
 	
+	public static Article ParseSome(String html, List<String> toReplace) {
+		Article article = new Article();
+		MetaTag tag = FastParser.parseTag(html, MetaTag.class, "property", "og:title"); 
+		if (tag != null) {
+			article.setArticlename(tag.getMetaContent());
+		}
+		
+		Div div = FastParser.parseTag(html, Div.class, "class", "chapterNum");
+		if (div != null) {
+			NodeList node = div.getChildren();
+			if (node.size() > 0) {
+				List<Pair<String, String>> list = FastParser.ExtractLink(node.toHtml());
+				for (int i = 0; i < list.size(); i++) {
+					Pair<String, String> p = list.get(i);
+					if (p.first().length() == 0 || p.second().length() == 0) {
+						list.remove(i);
+					}
+				}
+				if (list.size() > 0){
+					article.setLastchapterno(list.size());
+					article.setLastchapter(list.get(list.size() - 1).first());
+				}
+				article.setChapterList(list);
+			}
+		}
+		tag = FastParser.parseTag(html, MetaTag.class, "property", "og:image"); 
+		if (tag != null) {
+			article.setNovelCover(tag.getMetaContent());
+		}
+		
+		return article;
+	}
+	
 	public static Article Parse(String html, List<String> toReplace) {
 		Article article = new Article();
 		//String pattern = xml_.GetTextByName("//RuleConfigInfo/NovelIntro/Pattern");
