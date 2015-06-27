@@ -86,6 +86,17 @@ public class Utils {
 		System.arraycopy(buf, 0, results, 0, totalLen);
 		return results;
 	}
+	
+	public static long FileSize(String file) {
+		File f = new File(file);
+		return f.length();
+	}
+	
+	public static boolean Rename(String from, String to) {
+		File src = new File(from);
+		File dst = new File(to);
+		return src.renameTo(dst);
+	}
 
 	public static byte[] ReadFile(String fileName) throws IOException {
 		File file = new File(fileName);

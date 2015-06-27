@@ -21,11 +21,11 @@ import crawler.parser.ArticleParser;
 import crawler.parser.FastParser;
 
 public class FetchJob {
-	public static String resultDir_ = "./fetch_result/";
+	public static String kResultDir = "./fetch_result/";
 	public static String kArticleHtml = "article.html";
-	private String baseUrl_ = "http://www.kaixinwx.com";
-	private String bookUrl_ = "http://www.kaixinwx.com/book/";
-	private String toReplace_ = "开心";
+	public static String kBaseUrl = "http://www.kaixinwx.com";
+	public static String kBookUrl = "http://www.kaixinwx.com/book/";
+	public static String kToReplace = "开心";
 	
 	private int articleNo_ = 0;
 	private String articleUrl_ = null;
@@ -36,7 +36,7 @@ public class FetchJob {
 	
 	public FetchJob(int articleNo) {
 		articleNo_ = articleNo;
-		articleUrl_ = bookUrl_ + articleNo +".html";
+		articleUrl_ = kBookUrl + articleNo +".html";
 	}
 	
 	public int ParseArticle() {
@@ -47,32 +47,34 @@ public class FetchJob {
 			return -1;
 		}
 		try {
-			Utils.WriteFile(html, ArticlePath() + kArticleHtml);
+			Utils.WriteFile(html, ArticlePath(articleNo_, true) + kArticleHtml);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return -1;
 		}
 		List<String> toReplace = new ArrayList<String>();
-		toReplace.add(toReplace_);
+		toReplace.add(kToReplace);
 		article_ = ArticleParser.ParseSome(new String(html), toReplace);
 		
 		return 0;
 	}
 	
-	public String ArticlePath() {
-		String dir = resultDir_ + articleNo_ + "/";
-		Utils.Makedir(dir);
+	public static String ArticlePath(int articleNo, boolean createDir) {
+		String dir = kResultDir + articleNo + "/";
+		if (createDir) {
+			Utils.Makedir(dir);
+		}
 		return dir;
 	}
 	
 	public int ProcessChapter() {
 		List<Pair<String, String>> list = article_.getChapterList();
 		for (int i = 0; i < list.size(); ++i) {
-			String fileName = ArticlePath();
+			String fileName = ArticlePath(articleNo_, false);
 			
 			String url = "";
 			if (list.get(i).second().indexOf("http") < 0) {
-				url = baseUrl_;
+				url = kBaseUrl;
 			}
 			url += list.get(i).second();
 			
@@ -139,15 +141,15 @@ public class FetchJob {
 			System.err.println("FATAL failed to ParseArticle " + articleUrl_);
 			return -1;
 		}
-		if (AlreadyHasArticle(article_.getArticlename())) {
+		/*if (AlreadyHasArticle(article_.getArticlename())) {
 			System.out.println("AlreadyHasArticle " + articleUrl_ + " " + article_.getArticlename());  
 			return -1;
-		}
+		}*/
 
-		String fileName = ArticlePath() + articleNo_ +".jpg";
+		String fileName = ArticlePath(articleNo_, false) + articleNo_ +".jpg";
 		String url = "";
 		if (article_.getNovelCover().indexOf("http") < 0) {
-			url = baseUrl_;
+			url = kBaseUrl;
 		}
 		url += article_.getNovelCover();
 		byte[] html = crawler_.FetchByGet(url, Crawler.DefaultProperties(), Api.kFetchRetry);
@@ -183,7 +185,7 @@ public class FetchJob {
 		}
 		for (int i = start; i <= stop; ++i) {
 			FetchJob job = new FetchJob(i);
-			job.Process();
+			System.out.println("Fetch Job " +job.Process());
 		}
 	}
 }
