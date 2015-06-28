@@ -107,6 +107,8 @@ public class ApplyJob {
 	}
 	
 	public int ProcessChapter() {
+		int lastChapterNo = 0;
+		String lastChapterName = "";
 		List<Pair<String, String>> list = article_.getChapterList();
 		for (int i = 0; i < list.size(); ++i) {
 			chapter_ = new Chapter();
@@ -120,8 +122,16 @@ public class ApplyJob {
 			}
 			url += list.get(i).second();
 			String from = FetchJob.ArticlePath(articleNo_, false) + url.substring(url.lastIndexOf('/') + 1);
+			String to = ChapterPath(chapter_.getArticleno(), chapter_.getChapterno(), true);
 			
-			int fileSize = (int) Utils.FileSize(from);
+			if (!Utils.Rename(from, to)) {
+				if (FetchUrl(url, to) != 0) {
+					System.err.println("FATAL failed to Fetch " + url +" Rename " + from + " " + to);
+					continue;
+				}
+			}
+			
+			int fileSize = (int) Utils.FileSize(to);
 			chapter_.setSize(fileSize);
 			article_.setSize(article_.getSize() + fileSize);
 			if (SaveChapterToDb(chapter_) != 0) {
@@ -130,17 +140,34 @@ public class ApplyJob {
 				continue;
 			}
 			
-			String to = ChapterPath(chapter_.getArticleno(), chapter_.getChapterno(), true);
-			if (!Utils.Rename(from, to)) {
-				System.err.println("FATAL failed to Rename " + from +" " + to);
-			}
-			
-			if ((i % 100 == 0 || (i == list.size() - 1)) &&
-				UpdateLastChapter(chapter_.getChapterno(), list.get(i).first()) != 0) {
-				System.err.println("FATAL failed to UpdateLastChapter " + article_.getArticlename());
-			}
+			lastChapterNo = chapter_.getChapterno();
+			lastChapterName = list.get(i).first();
+		}
+		if (UpdateLastChapter(lastChapterNo, lastChapterName) != 0) {
+			System.err.println("FATAL failed to UpdateLastChapter " + article_.getArticlename());
 		}
 
+		return 0;
+	}
+	
+	private int FetchUrl(String url, String fileName) {
+		byte[] html = crawler_.FetchByGet(url, Crawler.DefaultProperties(), Api.kFetchRetry);
+		if (html == null) {
+			System.err.println("FATAL failed to fetch url " + url + " " + fileName);
+			return -1;
+		}
+		String txt = ParseChapter(new String(html));
+		if (txt == null) {
+			System.err.println("FATAL failed to ParseChapter url " + url + " " + fileName);
+			return -1;
+		}
+		try {
+			Utils.WriteFile(txt, fileName);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.err.println("FATAL failed to Save url " + url + " " + fileName);
+			return -1;
+		}
 		return 0;
 	}
 	
@@ -258,8 +285,15 @@ public class ApplyJob {
 		String to = CoverPath(article_.getArticleno(), article_.getImgflag(), true);
 		
 		if (!Utils.Rename(from, to)) {
-			System.err.println("FATAL failed to Rename " + from + " " + to);
-			return -1;
+			String url = "";
+			if (article_.getNovelCover().indexOf("http") < 0) {
+				url = FetchJob.kBaseUrl;
+			}
+			url += article_.getNovelCover();
+			if (FetchUrl(url, to) != 0) {
+				System.err.println("FATAL failed to Fetch " + url + " Rename " + from + " " + to);
+				return -1;
+			}
 		}
 		return 0;
 	}

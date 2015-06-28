@@ -87,6 +87,11 @@ public class Utils {
 		return results;
 	}
 	
+	public static boolean FileExist(String file) {
+		File f = new File(file);
+		return f.exists();
+	}
+	
 	public static long FileSize(String file) {
 		File f = new File(file);
 		return f.length();
