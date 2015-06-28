@@ -41,7 +41,7 @@ public class ApplyJob {
 	public int ParseArticle() {
 		byte[] html = null;
 		try {
-			html = Utils.ReadFile(FetchJob.ArticlePath(articleNo_, false));
+			html = Utils.ReadFile(FetchJob.ArticlePath(articleNo_, false) + FetchJob.kArticleHtml);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return -1;
