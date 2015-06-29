@@ -122,16 +122,16 @@ public class ApplyJob {
 			}
 			url += list.get(i).second();
 			String from = FetchJob.ArticlePath(articleNo_, false) + url.substring(url.lastIndexOf('/') + 1);
-			String to = ChapterPath(chapter_.getArticleno(), chapter_.getChapterno(), true);
 			
-			if (!Utils.Rename(from, to)) {
-				if (FetchUrl(url, to) != 0) {
-					System.err.println("FATAL failed to Fetch " + url +" Rename " + from + " " + to);
+			if (!Utils.FileExist(from)) {
+				System.out.println("file " + from + " Not exist, fetch now");
+				if (FetchUrl(url, from) != 0) {
+					System.err.println("FATAL failed to Fetch " + url +" " + from);
 					continue;
 				}
 			}
-			
-			int fileSize = (int) Utils.FileSize(to);
+
+			int fileSize = (int) Utils.FileSize(from);
 			chapter_.setSize(fileSize);
 			article_.setSize(article_.getSize() + fileSize);
 			if (SaveChapterToDb(chapter_) != 0) {
@@ -140,6 +140,15 @@ public class ApplyJob {
 				continue;
 			}
 			
+			
+			String to = ChapterPath(chapter_.getArticleno(), chapter_.getChapterno(), true);
+			if (!Utils.Rename(from, to)) {
+				if (FetchUrl(url, to) != 0) {
+					System.err.println("FATAL failed to Fetch " + url +" Rename " + from + " " + to);
+					continue;
+				}
+			}
+						
 			lastChapterNo = chapter_.getChapterno();
 			lastChapterName = list.get(i).first();
 		}
