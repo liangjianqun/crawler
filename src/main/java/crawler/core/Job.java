@@ -286,8 +286,7 @@ public class Job {
 
 	public int ProcessArticle() {
 		int result = 0;
-		logger.info("LastArticleNo " + lastArticleNo_
-				+ " Begin to ProcessArticle " + articleUrl_);
+		logger.info("Begin to ProcessArticle " + articleUrl_);
 		if (ParseArticle() != 0) {
 			logger.error("FATAL failed to ParseArticle " + articleUrl_);
 			result = -1;
@@ -329,6 +328,7 @@ public class Job {
 			dropArticle_ = true;
 			return -1;
 		}
+		logger.info("Succ ArticleNo " + lastArticleNo_ + " for " + articleUrl_);
 
 		return result;
 	}
@@ -378,7 +378,7 @@ public class Job {
 		}
 		for (int i = start; i <= stop; ++i) {
 			Job job = new Job("http://www.kaixinwx.com/book/" + i + ".html");
-			logger.info("result for job " + i ": " + job.Process());
+			logger.info("result for job " + i + ": " + job.Process());
 		}
 	}
 }
