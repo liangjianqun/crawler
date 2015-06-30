@@ -368,7 +368,6 @@ public class Job {
 	}
 
 	public static void main(String[] args) {
-		logger.info("Begin now");
 		int start = 1;
 		int stop = 50000;
 		if (args.length >= 1) {
@@ -379,7 +378,7 @@ public class Job {
 		}
 		for (int i = start; i <= stop; ++i) {
 			Job job = new Job("http://www.kaixinwx.com/book/" + i + ".html");
-			logger.info(job.Process());
+			logger.info("result for job " + i ": " + job.Process());
 		}
 	}
 }
