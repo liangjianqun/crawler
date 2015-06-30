@@ -42,13 +42,13 @@ public class Crawler {
 		try {
 			int result = httpClient_.executeMethod(post);
 			if (result != Api.kHttp200) {
-				System.out.println("failed to fetch " + url + ", errno " + result);
+				logger.info("failed to fetch " + url + ", errno " + result);
 				return null;
 			}
 			return Utils.ReadFromStream(post.getResponseBodyAsStream(),
 					Api.kMaxPageSize);
 		} catch (Exception e) {
-			System.err.println("Failed to Fetch " + url);
+			logger.error("Failed to Fetch " + url);
 			e.printStackTrace();
 		} finally {
 			post.releaseConnection();
@@ -67,7 +67,7 @@ public class Crawler {
 			if (result != null) {
 				break;
 			}
-			System.err.println("Failed to fetch " + url +" retry:" + retry);
+			logger.error("Failed to fetch " + url +" retry:" + retry);
 		}
 		return result;
 	}
@@ -85,12 +85,12 @@ public class Crawler {
 		try {
 				int errno = httpClient_.executeMethod(getter);
 				if (errno != Api.kHttp200) {
-					System.out.println("Failed to fetch " + url + " , errno " + errno);
+					logger.info("Failed to fetch " + url + " , errno " + errno);
 				} else {
 					result = Utils.ReadFromStream(getter.getResponseBodyAsStream(), 0);
 				}
 		} catch (Exception e) {
-			System.err.println("Failed to Fetch " + url);
+			logger.error("Failed to Fetch " + url);
 			e.printStackTrace();
 		} finally {
 			getter.releaseConnection();
@@ -123,7 +123,7 @@ public class Crawler {
 		
 		Crawler crawler = new Crawler();
 		byte[] result = crawler.FetchByGet(url, Crawler.DefaultProperties(), 1);
-		//System.out.println(new String(result));
+		//logger.info(new String(result));
 		try {
 			Utils.WriteFile(new String(result), "./article.html");
 		} catch (IOException e) {

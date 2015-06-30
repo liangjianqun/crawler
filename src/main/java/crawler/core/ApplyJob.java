@@ -124,9 +124,9 @@ public class ApplyJob {
 			String from = FetchJob.ArticlePath(articleNo_, false) + url.substring(url.lastIndexOf('/') + 1);
 			
 			if (!Utils.FileExist(from)) {
-				System.out.println("file " + from + " Not exist, fetch now");
+				logger.info("file " + from + " Not exist, fetch now");
 				if (FetchUrl(url, from) != 0) {
-					System.err.println("FATAL failed to Fetch " + url +" " + from);
+					logger.error("FATAL failed to Fetch " + url +" " + from);
 					continue;
 				}
 			}
@@ -135,7 +135,7 @@ public class ApplyJob {
 			chapter_.setSize(fileSize);
 			article_.setSize(article_.getSize() + fileSize);
 			if (SaveChapterToDb(chapter_) != 0) {
-				System.err.println("FATAL failed to SaveChapterToDb url " + url + " " +
+				logger.error("FATAL failed to SaveChapterToDb url " + url + " " +
 									ChapterPath(chapter_.getArticleno(), chapter_.getChapterno(), false));
 				continue;
 			}
@@ -144,7 +144,7 @@ public class ApplyJob {
 			String to = ChapterPath(chapter_.getArticleno(), chapter_.getChapterno(), true);
 			if (!Utils.Rename(from, to)) {
 				if (FetchUrl(url, to) != 0) {
-					System.err.println("FATAL failed to Fetch " + url +" Rename " + from + " " + to);
+					logger.error("FATAL failed to Fetch " + url +" Rename " + from + " " + to);
 					continue;
 				}
 			}
@@ -153,7 +153,7 @@ public class ApplyJob {
 			lastChapterName = list.get(i).first();
 		}
 		if (UpdateLastChapter(lastChapterNo, lastChapterName) != 0) {
-			System.err.println("FATAL failed to UpdateLastChapter " + article_.getArticlename());
+			logger.error("FATAL failed to UpdateLastChapter " + article_.getArticlename());
 		}
 
 		return 0;
@@ -162,19 +162,19 @@ public class ApplyJob {
 	private int FetchUrl(String url, String fileName) {
 		byte[] html = crawler_.FetchByGet(url, Crawler.DefaultProperties(), Api.kFetchRetry);
 		if (html == null) {
-			System.err.println("FATAL failed to fetch url " + url + " " + fileName);
+			logger.error("FATAL failed to fetch url " + url + " " + fileName);
 			return -1;
 		}
 		String txt = ParseChapter(new String(html));
 		if (txt == null) {
-			System.err.println("FATAL failed to ParseChapter url " + url + " " + fileName);
+			logger.error("FATAL failed to ParseChapter url " + url + " " + fileName);
 			return -1;
 		}
 		try {
 			Utils.WriteFile(txt, fileName);
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.err.println("FATAL failed to Save url " + url + " " + fileName);
+			logger.error("FATAL failed to Save url " + url + " " + fileName);
 			return -1;
 		}
 		return 0;
@@ -275,18 +275,18 @@ public class ApplyJob {
 	}
 	
 	public int ProcessArticle() {
-        System.out.println("LastArticleNo " + lastArticleNo_ +" Begin to ProcessArticle " + articleUrl_);    
+        logger.info("LastArticleNo " + lastArticleNo_ +" Begin to ProcessArticle " + articleUrl_);    
 		if (ParseArticle() != 0) {
-			System.err.println("FATAL failed to ParseArticle " + articleUrl_);
+			logger.error("FATAL failed to ParseArticle " + articleUrl_);
 			return -1;
 		}
 		if (AlreadyHasArticle(article_.getArticlename())) {
-			System.out.println("AlreadyHasArticle " + articleUrl_ + " " + article_.getArticlename());  
+			logger.info("AlreadyHasArticle " + articleUrl_ + " " + article_.getArticlename());  
 			return -1;
 		}
 
 		if (SaveArticleToDb() != 0) {
-			System.err.println("FATAL failed to SaveArticleToDb url " + articleUrl_);
+			logger.error("FATAL failed to SaveArticleToDb url " + articleUrl_);
 			return -1;
 		}
 		
@@ -300,7 +300,7 @@ public class ApplyJob {
 			}
 			url += article_.getNovelCover();
 			if (FetchUrl(url, to) != 0) {
-				System.err.println("FATAL failed to Fetch " + url + " Rename " + from + " " + to);
+				logger.error("FATAL failed to Fetch " + url + " Rename " + from + " " + to);
 				return -1;
 			}
 		}
@@ -312,7 +312,7 @@ public class ApplyJob {
 		Connection con = DbUtils.GetConnection();
 		Statement pstmt = null;
 		String sql = "delete from t_article where articleno = " + article_.getArticleno();
-		System.err.println("Begin to Drop article " + sql);
+		logger.error("Begin to Drop article " + sql);
 		try {
 			pstmt = con.createStatement();
 			pstmt.execute(sql); 
@@ -351,7 +351,7 @@ public class ApplyJob {
 		}
 		for (int i = start; i <= stop; ++i) {
 			ApplyJob job = new ApplyJob(i);
-			System.out.println("Apply Job " + job.Process());
+			logger.info("Apply Job " + job.Process());
 		}
 	}
 }

@@ -28,7 +28,7 @@ public class Category {
 		try {
 			Parse();
 		} catch (IOException e) {
-			System.err.println("Failed to Load " + categoryFile_);
+			logger.error("Failed to Load " + categoryFile_);
 			assert false;
 			e.printStackTrace();
 		}
@@ -91,8 +91,8 @@ public class Category {
 
 	public static void main(String[] args) {
 		Category ca = new Category("src/main/resources/category.ini");
-		System.out.println(ca.GetBigCategory("幻想网游"));
-		System.out.println(ca.GetSmallCategory("思想·文化"));
+		logger.info(ca.GetBigCategory("幻想网游"));
+		logger.info(ca.GetSmallCategory("思想·文化"));
 	}
 
 }

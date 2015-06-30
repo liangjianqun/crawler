@@ -21,7 +21,7 @@ public class XmlWriter {
 		try { 
 			builder_ = factory.newDocumentBuilder(); 
 		} catch (ParserConfigurationException pce) { 
-			System.err.println(pce); 
+			logger.error(pce); 
 		}
 		doc_ = builder_.newDocument();
 	}
@@ -52,7 +52,7 @@ public class XmlWriter {
 		father = xml.CreateElement(father, "xx2", "aname2", "avalue2");
 		Text text = xml.CreateTextNode(father, "textnode");
 		Document doc = xml.Doc();
-		//System.out.println("" + doc.);
+		//logger.info("" + doc.);
 	}
 }
 

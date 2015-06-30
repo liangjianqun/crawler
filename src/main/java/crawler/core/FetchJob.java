@@ -40,7 +40,7 @@ public class FetchJob {
 	}
 	
 	public int ParseArticle() {
-		System.out.println("Try to fetch " + articleUrl_);
+		logger.info("Try to fetch " + articleUrl_);
 		byte[] html = crawler_.FetchByGet(articleUrl_, Crawler.DefaultProperties(), Api.kFetchRetry);
   
 		if (html == null) {
@@ -80,22 +80,22 @@ public class FetchJob {
 			
 			fileName = fileName + url.substring(url.lastIndexOf('/') + 1);
 			
-            System.out.println("LastChapterNo " + lastChapterNo_ + " Begin to FetchChapter " + url);    
+            logger.info("LastChapterNo " + lastChapterNo_ + " Begin to FetchChapter " + url);    
 			byte[] html = crawler_.FetchByGet(url, Crawler.DefaultProperties(), Api.kFetchRetry);
 			if (html == null) {
-				System.err.println("FATAL failed to fetch url " + url + " " + fileName);
+				logger.error("FATAL failed to fetch url " + url + " " + fileName);
 				continue;
 			}
 			String txt = ParseChapter(new String(html));
 			if (txt == null) {
-				System.err.println("FATAL failed to ParseChapter url " + url + " " + fileName);
+				logger.error("FATAL failed to ParseChapter url " + url + " " + fileName);
 				continue;
 			}
 			try {
 				Utils.WriteFile(txt, fileName);
 			} catch (IOException e) {
 				e.printStackTrace();
-				System.err.println("FATAL failed to Save url " + url + " " + fileName);
+				logger.error("FATAL failed to Save url " + url + " " + fileName);
 				continue;
 			}
 		}
@@ -136,13 +136,13 @@ public class FetchJob {
 	}
 	
 	public int ProcessArticle() {
-        System.out.println("LastArticleNo " + lastArticleNo_ +" Begin to FetchArticle " + articleUrl_);    
+        logger.info("LastArticleNo " + lastArticleNo_ +" Begin to FetchArticle " + articleUrl_);    
 		if (ParseArticle() != 0) {
-			System.err.println("FATAL failed to ParseArticle " + articleUrl_);
+			logger.error("FATAL failed to ParseArticle " + articleUrl_);
 			return -1;
 		}
 		/*if (AlreadyHasArticle(article_.getArticlename())) {
-			System.out.println("AlreadyHasArticle " + articleUrl_ + " " + article_.getArticlename());  
+			logger.info("AlreadyHasArticle " + articleUrl_ + " " + article_.getArticlename());  
 			return -1;
 		}*/
 
@@ -154,13 +154,13 @@ public class FetchJob {
 		url += article_.getNovelCover();
 		byte[] html = crawler_.FetchByGet(url, Crawler.DefaultProperties(), Api.kFetchRetry);
 		if (html == null) {
-			System.err.println("FATAL failed to fetch url " + url + " " + fileName);
+			logger.error("FATAL failed to fetch url " + url + " " + fileName);
 			return -1;
 		}
 		try {
 			Utils.WriteFile(html, fileName);
 		} catch (IOException e) {
-            System.err.println("FATAL failed to SaveCoverToDisk url " + url + " " + fileName);
+            logger.error("FATAL failed to SaveCoverToDisk url " + url + " " + fileName);
             return -1;
 		}
 
@@ -185,7 +185,7 @@ public class FetchJob {
 		}
 		for (int i = start; i <= stop; ++i) {
 			FetchJob job = new FetchJob(i);
-			System.out.println("Fetch Job " +job.Process());
+			logger.info("Fetch Job " +job.Process());
 		}
 	}
 }

@@ -171,7 +171,7 @@ public class Chapter {
 	
 	public static void main(String[] args) {
 		Chapter c = new Chapter();
-		System.out.println(c.Sql());
+		logger.info(c.Sql());
 	}
 
 }

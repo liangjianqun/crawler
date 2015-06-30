@@ -106,7 +106,7 @@ public class FastParser {
 		
         List<Div> authors=FastParser.parseTags(new String(result), Div.class, "class", "mainContenr"); 
 		for (Div div : authors) {
-			System.out.println(div.getStringText());
+			logger.info(div.getStringText());
 		}
 	}
 }

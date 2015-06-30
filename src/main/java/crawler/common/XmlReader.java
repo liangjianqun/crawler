@@ -44,12 +44,12 @@ public class XmlReader {
 	public class MyVisitor extends VisitorSupport {
 		public void visit(Element element) {
 			System.out.print("["+element.getName());
-			System.out.println(":"+element.getText()+"]");
+			logger.info(":"+element.getText()+"]");
 		}
 
 		public void visit(Attribute attr) {
 			System.out.print("["+attr.getName());
-			System.out.println(":"+attr.getValue()+"]");
+			logger.info(":"+attr.getValue()+"]");
 		}
 	}
 	
@@ -59,7 +59,7 @@ public class XmlReader {
 
 	public void bar(Document document, String element) {
 		Node node = document.selectSingleNode(element);
-		System.out.println(node);
+		logger.info(node);
 		String name = node.valueOf("xxx");	
 	}
 	
@@ -78,6 +78,6 @@ public class XmlReader {
 		String file = "/Users/liangjianqun/Documents/java/workspace/crawler/src/main/resources/kaixinwx.xml";
 		XmlReader xml = new XmlReader(file);
 		String node = xml.GetTextByName("//RuleConfigInfo/NovelCover/Pattern");
-		System.out.println(node);		
+		logger.info(node);		
 	}
 }

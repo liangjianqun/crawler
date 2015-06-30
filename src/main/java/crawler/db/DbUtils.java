@@ -27,7 +27,7 @@ public class DbUtils {
 			// 加载驱动
 			Class.forName("org.postgresql.Driver");
 		} catch (ClassNotFoundException e) {
-			System.err.println("驱动加载出错！");
+			logger.error("驱动加载出错！");
 			e.printStackTrace();
 		}
 	}
@@ -54,7 +54,7 @@ public class DbUtils {
 			//pstmt.executeUpdate();
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				System.out.println("total:" + rs.getString("loginid"));
+				logger.info("total:" + rs.getString("loginid"));
 			}
 			
 			String sql = Article.getSqlArticlePrefix() + " VALUES (";

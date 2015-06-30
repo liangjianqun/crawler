@@ -105,14 +105,14 @@ public class Pinyin {
 		String s = "< 中國-China-중국 >";
 
 		pinyin = Pinyin.getFirstPinyin(s);
-		System.err.println("getFirstHanyuPinyin(" + s + ")......[" + pinyin
+		logger.error("getFirstHanyuPinyin(" + s + ")......[" + pinyin
 				+ "]");
 
 		pinyin = Pinyin.getPinyin(s);
-		System.err.println("getHanyuPinyin(" + s + ")......[" + pinyin + "]");
+		logger.error("getHanyuPinyin(" + s + ")......[" + pinyin + "]");
 
 		firstAndPinyin = Pinyin.getFirstAndPinyin(s);
-		System.err.println("getFirstAndHanyuPinyin(" + s + ")......"
+		logger.error("getFirstAndHanyuPinyin(" + s + ")......"
 				+ Arrays.asList(firstAndPinyin));
 	}
 }

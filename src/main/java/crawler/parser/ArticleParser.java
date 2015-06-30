@@ -142,7 +142,7 @@ public class ArticleParser {
 		List<String> toReplace = new ArrayList<String>();
 		toReplace.add("开心");
 		Article article = ArticleParser.Parse(html, toReplace);
-		System.out.println(article.Sql());
+		logger.info(article.Sql());
 	}
 
 }
