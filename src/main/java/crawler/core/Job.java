@@ -378,8 +378,8 @@ public class Job {
 			stop = Integer.parseInt(args[1]);
 		}
 		for (int i = start; i <= stop; ++i) {
-			//Job job = new Job("http://www.kaixinwx.com/book/" + i + ".html");
-			//logger.info(job.Process());
+			Job job = new Job("http://www.kaixinwx.com/book/" + i + ".html");
+			logger.info(job.Process());
 		}
 	}
 }

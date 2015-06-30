@@ -12,5 +12,4 @@ echo -n "classpath=" > run/run.sh
 for f in `ls run/crawler/lib`;do echo -n ":./crawler/lib/${f}";done>> run/run.sh
 echo "">>run/run.sh
 
-echo "exec java -Xms128m -Xmx128m -ea -cp \${classpath} crawler.core.FetchJob $@ 1>>std_fetch.out 2>>std_fetch.err &" >> run/run.sh 
-echo "exec java -Xms128m -Xmx128m -ea -cp \${classpath} crawler.core.ApplyJob $@ 1>>std_apply.out 2>>std_apply.err &" >> run/run.sh 
+echo "exec java -Xms128m -Xmx128m -ea -cp \${classpath} crawler.core.Job $@ 1>>std.out 2>>std.err &" >> run/run.sh 
