@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.htmlparser.tags.Div;
 
 import crawler.common.Api;
@@ -21,6 +22,7 @@ import crawler.parser.ArticleParser;
 import crawler.parser.FastParser;
 
 public class FetchJob {
+	private static Logger logger = Logger.getLogger(FetchJob.class);
 	public static String kResultDir = "./fetch_result/";
 	public static String kArticleHtml = "article.html";
 	public static String kBaseUrl = "http://www.kaixinwx.com";

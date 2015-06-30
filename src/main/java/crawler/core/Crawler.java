@@ -12,11 +12,13 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.log4j.Logger;
 
 import crawler.common.Api;
 import crawler.common.Utils;
 
 public class Crawler {
+	private static Logger logger = Logger.getLogger(Crawler.class);
 	private HttpClient httpClient_;
 
 	public Crawler() {

@@ -1,8 +1,11 @@
 package crawler.novel;
 
+import org.apache.log4j.Logger;
+
 import crawler.common.Utils;
 
 public class Chapter {
+	private static Logger logger = Logger.getLogger(Chapter.class);
 /*
 	chapterno serial NOT NULL,
     articleno int,

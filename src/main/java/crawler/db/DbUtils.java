@@ -7,10 +7,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.apache.log4j.Logger;
+
+import crawler.common.Category;
 import crawler.novel.Article;
 import crawler.novel.Chapter;
 
 public class DbUtils {
+	private static Logger logger = Logger.getLogger(DbUtils.class);
 	// http://miao19880124.iteye.com/blog/992576
 	// private static final String URL =
 	// "jdbc:postgresql://127.0.0.1:8432/yidu"; // JDBC连接URL

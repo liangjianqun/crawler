@@ -2,12 +2,16 @@ package crawler.novel;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import crawler.common.Pair;
 import crawler.common.Pinyin;
 import crawler.common.Utils;
+import crawler.core.FetchJob;
 
 public class Article {
+	private static Logger logger = Logger.getLogger(Article.class);
 	public static final String kStringDelimiter = "''";
 	public static final String kCommaDelimiter = ",";
 	public static String SqlArticlePrefix = "INSERT INTO t_article(articlename,pinyin,pinyinheadchar,initial,keywords,"+

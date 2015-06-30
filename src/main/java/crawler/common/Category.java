@@ -9,7 +9,12 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
+import crawler.core.Job;
+
 public class Category {
+	private static Logger logger = Logger.getLogger(Category.class);
 	private String categoryFile_;
 	private Map<String, Integer> bigCategory_ = new HashMap<String, Integer>();
 	private Map<String, Integer> smallCategory_ = new HashMap<String, Integer>();;

@@ -4,11 +4,13 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
 public class XmlWriter {
+	private static Logger logger = Logger.getLogger(XmlWriter.class);
 	private DocumentBuilder builder_ = null;
 	private Document doc_ = null;
 	

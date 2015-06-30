@@ -11,7 +11,12 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
+
+import crawler.core.Job;
+
 public class Utils {
+	private static Logger logger = Logger.getLogger(Utils.class);
 	public static String TimeOfDay() {
 		return TimeOfDay("yyyy-MM-dd HH:mm:ss.SSS");
 	}

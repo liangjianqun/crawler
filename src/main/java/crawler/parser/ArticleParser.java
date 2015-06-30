@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.htmlparser.tags.Div;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.MetaTag;
@@ -14,8 +15,10 @@ import crawler.common.Pair;
 import crawler.common.Utils;
 import crawler.common.XmlReader;
 import crawler.novel.Article;
+import crawler.novel.Chapter;
 
 public class ArticleParser {
+	private static Logger logger = Logger.getLogger(ArticleParser.class);
 	private static XmlReader xml_;
 	
 	public static String kReplaceMent = "极品书";

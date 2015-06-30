@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.htmlparser.tags.Div;
 
 import crawler.common.Api;
@@ -21,6 +22,7 @@ import crawler.parser.ArticleParser;
 import crawler.parser.FastParser;
 
 public class ApplyJob {
+	private static Logger logger = Logger.getLogger(ApplyJob.class);
 	private Article article_ = null;
 	private Chapter chapter_ = null;
 	private Crawler crawler_ = new Crawler();

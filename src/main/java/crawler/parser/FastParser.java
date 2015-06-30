@@ -3,6 +3,7 @@ package crawler.parser;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.Parser;
@@ -17,6 +18,7 @@ import crawler.common.Pair;
 import crawler.core.Crawler;
 
 public class FastParser {
+	private static Logger logger = Logger.getLogger(FastParser.class);
 	public static List<Pair<String, String>> ExtractLink(String input) {
 		List<Pair<String, String>> list = new ArrayList();
 	    try

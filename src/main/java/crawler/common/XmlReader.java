@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -12,7 +13,10 @@ import org.dom4j.Node;
 import org.dom4j.VisitorSupport;
 import org.dom4j.io.SAXReader;
 
+import crawler.core.Job;
+
 public class XmlReader {
+	private static Logger logger = Logger.getLogger(XmlReader.class);
 	private Document doc_;
 	
 	public XmlReader(Document doc) {

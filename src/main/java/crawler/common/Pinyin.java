@@ -2,6 +2,9 @@ package crawler.common;
 
 import java.util.Arrays;
 
+import org.apache.log4j.Logger;
+
+import crawler.db.DbUtils;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -9,6 +12,7 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
 public class Pinyin {
+	private static Logger logger = Logger.getLogger(Pinyin.class);
 	public static String getPinyin(String strCN)
 			throws BadHanyuPinyinOutputFormatCombination {
 		if (strCN == null) {
