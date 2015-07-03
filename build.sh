@@ -13,3 +13,5 @@ for f in `ls run/crawler/lib`;do echo -n ":./crawler/lib/${f}";done>> run/run.sh
 echo "">>run/run.sh
 
 echo "exec java -Xms128m -Xmx128m -ea -cp \${classpath} crawler.core.Job $@ 1>>std.out 2>>std.err &" >> run/run.sh 
+cp src/main/resources/* run/
+mkdir run/log/
