@@ -107,8 +107,9 @@ public class Crawler {
 	public static Properties DefaultProperties() {
 		Properties props = new Properties();
         props.put("User-Agent",
-                "Mozilla/5.0 (X11; U; Linux i686; zh-CN; rv:1.9.2.10) Gecko/20100922 Ubuntu/10.10 (maverick) Firefox/3");
-        props.put("Accept-Language", "zh-cn");
+                //"Mozilla/5.0 (X11; U; Linux i686; zh-CN; rv:1.9.2.10) Gecko/20100922 Ubuntu/10.10 (maverick) Firefox/3");
+        			"Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)");
+        	props.put("Accept-Language", "zh-cn");
         props.put("Accept-Encoding", "deflate");
         props.put("Accept-Charset", "GB2312,utf-8;q=0.7,*;q=0.7");
         return props;
