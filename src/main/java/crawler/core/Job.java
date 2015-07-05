@@ -26,7 +26,7 @@ public class Job {
 	private String articleUrl_ = null;
 	private Article article_ = null;
 	private Chapter chapter_ = null;
-	private Crawler crawler_ = new Crawler();
+	public static Crawler crawler_ = new Crawler();
 	public static int lastArticleNo_ = 0;
 	private int lastChapterNo_ = 0;
 	private boolean dropArticle_ = false;
@@ -39,8 +39,7 @@ public class Job {
 
 	public int ParseArticle() {
 		logger.info("Try to fetch " + articleUrl_);
-		Crawler crawler = new Crawler();
-		byte[] html = crawler.FetchByGet(articleUrl_,
+		byte[] html = crawler_.FetchByGet(articleUrl_,
 				Crawler.DefaultProperties(), Api.kFetchRetry);
 
 		if (html == null) {

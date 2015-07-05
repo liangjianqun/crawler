@@ -108,7 +108,8 @@ public class Crawler {
 		Properties props = new Properties();
         props.put("User-Agent",
                 //"Mozilla/5.0 (X11; U; Linux i686; zh-CN; rv:1.9.2.10) Gecko/20100922 Ubuntu/10.10 (maverick) Firefox/3");
-        			"Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)");
+        			//"Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)");
+        			"Mozilla/5.0 (Linux; Android 4.4.4; HM NOTE 1LTE Build/KTU84P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.93 Mobile Safari/537.36");
         	props.put("Accept-Language", "zh-cn");
         props.put("Accept-Encoding", "deflate");
         props.put("Accept-Charset", "GB2312,utf-8;q=0.7,*;q=0.7");
@@ -122,8 +123,9 @@ public class Crawler {
 	}
 
 	public static void main(String[] args) {
-		String url = "http://www.kaixinwx.com/book/35592.html";
-		
+		//String url = "http://www.kaixinwx.com/book/35592.html";
+		String url = "http://m.sm.cn/novelw/menu.php?page=5&title=%E6%88%91%E7%9A%84%E4%BB%99%E5%A5%B3%E5%A4%A7%E5%B0%8F%E5%A7%90&author=%E5%AF%92%E9%97%A8&order=asc&uc_param_str=dnntnwvepffrgibijbprsv";
+		//url += "?uc_param_str=dnntnwvepffrgibijbprsv&#catal/%E6%88%91%E7%9A%84%E4%BB%99%E5%A5%B3%E5%A4%A7%E5%B0%8F%E5%A7%90/%E5%AF%92%E9%97%A8";
 		Crawler crawler = new Crawler();
 		byte[] result = crawler.FetchByGet(url, Crawler.DefaultProperties(), 1);
 		//logger.info(new String(result));
